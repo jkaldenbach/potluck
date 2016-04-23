@@ -55,6 +55,13 @@ angular.module('starter.controllers', ['ui.router'])
         $http.post('http://localhost:8000/deployments/', $scope.deployment).then(function(response){
           console.log(response);
           $ionicLoading.hide();
+          $scope.deployment = {
+            name: new Date().getMonth() + "/" + new Date().getDate() + "/" + new Date().getFullYear(),
+            count: 1,
+            loss_count: 0,
+            loss_public: false,
+            state: "deployed"
+          };
         });
       }
       else{

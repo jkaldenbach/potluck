@@ -58,3 +58,6 @@ div.scroll {
 div.scroll {
   height: 87.5%
 }
+div.overflow-block{
+  overflow-y: scroll;
+}
