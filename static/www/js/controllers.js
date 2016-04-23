@@ -19,35 +19,48 @@ angular.module('starter.controllers', ['ui.router'])
 
 })
 
-.controller('AccountCtrl', function($scope, $ionicModal) {
+.controller('AccountCtrl', function($scope, $http, $ionicModal) {
 
   // VARIABLES //
+
+  $scope.pots = [];
+  $scope.newPot = {};
+
+  $scope.colors = [
+    {value: "Large", code: "lg"},
+    {value: "Small", code: "sm"}
+  ];
 
   $scope.user = {
     name: "Ishmael",
     password: "*******"
   };
 
-  $scope.pots = [
-    {
-      name: "Pot1",
-      color: "Red",
-      size: "Large",
-      state: "Deployed"
-    },
-    {
-      name: "Pot2",
-      color: "Blue",
-      size: "Small",
-      state: "Lost"
-    },
-    {
-      name: "Pot3",
-      color: "Red",
-      size: "Large",
-      state: "Collected"
-    }
-  ];
+  // FUNCTIONS //
+
+  function init() {
+    $http({
+      method: 'GET',
+      url: 'http://localhost:8000/pots/'
+    }).then(function (res) {
+      var i,
+      arr = [],
+      data = res.data,
+      len = res.data.length;
+
+      if (data) {
+        arr = data.filter(prepPots);
+        $scope.pots = arr;
+      }
+    });
+  }
+
+  function prepPots(a) {
+    a.name = !a.name ? "Pot" : a.name;
+    a.size = a.size == "lg" ? "Large" : "Small";
+    a.state = a.state.charAt(0).toUpperCase() + a.state.slice(1);
+    return a;
+  }
 
   // SCOPE FUNCTIONS //
 
@@ -62,10 +75,27 @@ angular.module('starter.controllers', ['ui.router'])
   };
 
   $scope.savePot = function(a) {
-    // By DEFAULT, Deployed State //
-    a.state = "Deployed";
-    $scope.pots.push(a);
+    a.size = a.size.code;
+    a.state = "deployed";
+
+    $http({
+      method: 'POST',
+      url: 'http://localhost:8000/pots/',
+      data: {pot:a}
+    }).then(function (res) {
+      console.log(res);
+    });
+
     $scope.modal.hide();
+  };
+
+  // Button Validation //
+  $scope.buttonCheck = function() {
+    if ($scope.newPot.name && $scope.newPot.color && $scope.newPot.size) {
+      return false;
+    } else {
+      return true;
+    }
   };
 
   // IONIC MODAL //
@@ -75,4 +105,8 @@ angular.module('starter.controllers', ['ui.router'])
   }).then(function(modal) {
     $scope.modal = modal;
   });
+
+  // INIT //
+  init();
+
 });

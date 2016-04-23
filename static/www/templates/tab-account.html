@@ -68,9 +68,9 @@
         </label>
         <label class="item item-input">
           <span class="input-label">Size</span>
-          <input ng-model="newPot.size" type="text">
+          <select ng-model="newPot.size" ng-options="color as color.value for color in colors track by color.code" />
         </label>
-        <button class="button button-full button-balanced" ng-click="savePot(newPot)">Create</button>
+        <button class="button button-full button-balanced" ng-click="savePot(newPot)" ng-disabled="buttonCheck()">Create</button>
       </div>
     </ion-content>
   </ion-modal-view>
