@@ -1,0 +1,78 @@
+<ion-view view-title="Account">
+  <ion-content>
+
+    <!-- USER DATA -->
+    <div class="acct-header">
+      <b>User Data</b>
+    </div>
+
+    <ion-card>
+      <ion-list>
+        <ion-item>
+          <label>Username</label>
+          <input type="text" ng-model="user.name"/>
+        </ion-item>
+
+        <ion-item>
+          <label>Password</label>
+          <input type="text" ng-model="user.password"/>
+        </ion-item>
+      </ion-list>
+    </ion-card>
+
+    <div class="acct-header">
+      <b>Pot Data</b>
+    </div>
+
+    <!-- POT DATA -->
+    <ion-card>
+      <ion-list>
+        <ion-item ng-repeat="pot in pots">
+          <label>Name</label>
+          <input type="text" ng-model="pot.name" style="font-weight:bold"/>
+          <label>Color</label>
+          <input type="text" ng-model="pot.color" style="font-weight:bold"/>
+          <label>Size</label>
+          <input type="text" ng-model="pot.size" style="font-weight:bold"/>
+          <label>Status</label>
+          <input type="text" ng-model="pot.state" style="font-weight:bold"/>
+          <button class="button button-clear button-assertive pull-right" ng-click="deletePot($index)">
+            <div class="ion-ios-trash"> Delete</div>
+          </button>
+        </ion-item>
+      </ion-list>
+    </ion-card>
+
+    <button class="button button-balanced m5 pull-right" ng-click="createPot()">
+      <div class="ion-plus"> New Pot</div>
+    </button>
+  </ion-content>
+</ion-view>
+
+<!-- NEW POT MODAL -->
+<script id="templates/newPotModal.html" type="text/ng-template">
+  <ion-modal-view>
+    <ion-header-bar class="bar bar-header bar-balanced">
+      <h1 class="title">New Pot</h1>
+      <button class="button button-clear button-primary" ng-click="modal.hide()">Cancel</button>
+    </ion-header-bar>
+    <ion-content class="padding">
+      <div class="list">
+        <label class="item item-input">
+          <span class="input-label">Name</span>
+          <input ng-model="newPot.name" type="text">
+        </label>
+        <label class="item item-input">
+          <span class="input-label">Color</span>
+          <input ng-model="newPot.color" type="text">
+        </label>
+        <label class="item item-input">
+          <span class="input-label">Size</span>
+          <input ng-model="newPot.size" type="text">
+        </label>
+        <button class="button button-full button-balanced" ng-click="savePot(newPot)">Create</button>
+      </div>
+    </ion-content>
+  </ion-modal-view>
+</script>
+<!-- END MODAL -- >

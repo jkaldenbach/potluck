@@ -1,0 +1,33 @@
+/* Empty. Add your own CSS if you like */
+.center {
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+}
+
+.text-center {
+  text-align:center;
+}
+
+.pull-right {
+  float:right;
+}
+
+.m5 {
+  margin:5px;
+}
+
+.btnz {
+  font-size:26px;
+  font-weight:bold;
+  width:150px;
+  height:43px;
+  line-height:-1px;
+}
+
+.acct-header {
+  padding-left:10px;
+  height:30px;
+  line-height:30px;
+  background-color:#EEE;
+}
