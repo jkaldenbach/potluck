@@ -16,6 +16,7 @@ angular.module('starter.controllers', ['ui.router'])
 })
 
 .controller('DeployCtrl', function($scope) {
+  $scope.map = { center: { latitude: 45, longitude: -73 }, zoom: 8 };
 
 })
 
@@ -89,7 +90,6 @@ angular.module('starter.controllers', ['ui.router'])
     $scope.modal.hide();
   };
 
-  // Button Validation //
   $scope.buttonCheck = function() {
     if ($scope.newPot.name && $scope.newPot.color && $scope.newPot.size) {
       return false;

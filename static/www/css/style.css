@@ -31,3 +31,7 @@
   line-height:30px;
   background-color:#EEE;
 }
+
+.angular-google-map-container {
+  height: 100%;
+}
