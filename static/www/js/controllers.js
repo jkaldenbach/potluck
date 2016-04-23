@@ -5,14 +5,30 @@ angular.module('starter.controllers', ['ui.router'])
     $state.go('tab.deploy');
   };
 
-  $scope.check = function() {
-    $state.go('check');
+  $scope.map = function() {
+    $state.go('tab.map');
   };
 
-  $scope.claim = function() {
-    $state.go('claim');
+  $scope.report = function() {
+    $state.go('tab.report');
   };
 
+  $scope.retrieve = function() {
+    $state.go('tab.retrieve');
+  };
+
+})
+
+.controller('ReportCtrl', function($scope, $state) {
+  $scope.deployment = [
+    {value: "Red", code: "red"},
+    {value: "Yellow", code: "ylw"},
+    {value: "Green", code: "grn"},
+    {value: "Blue", code: "blu"},
+    {value: "Purple", code: "prp"},
+    {value: "White", code: "wht"},
+    {value: "Black", code: "blk"}
+  ];
 })
 
 .controller('DeployCtrl', function($scope, mapService, $http, $ionicLoading) {
@@ -93,7 +109,7 @@ angular.module('starter.controllers', ['ui.router'])
     var markerOptions = mapService.setupMarker(event, map);
 
     if($scope.newMarker){
-      $scope.newMarker.setPosition(markerOptions.position)
+      $scope.newMarker.setPosition(markerOptions.position);
     }
     else{
       $scope.newMarker = new google.maps.Marker(markerOptions);
@@ -133,17 +149,6 @@ angular.module('starter.controllers', ['ui.router'])
     {value: "Eel"}
   ];
 
-  $scope.user = {
-    name: "Ishmael",
-    password: "*******",
-    license: "SC-1044D",
-    image: function() {
-      var img = new Image();
-      img.src = "www/img/buoy.jpg";
-      return img;
-    }
-  };
-
   // FUNCTIONS //
 
   function init() {
@@ -157,18 +162,22 @@ angular.module('starter.controllers', ['ui.router'])
       len = res.data.length;
 
       if (data) {
-        arr = data.filter(prepPots);
-        $scope.pots = arr;
+        $scope.pots = data;
       }
     });
-  }
 
-  function prepPots(a) {
-    // a.name = !a.name ? "Pot" : a.name;
-    // a.size = a.size == "lg" ? "Large" : "Small";
-    // a.buoy = "./img/buoy.jpg";
-    // a.state = a.state.charAt(0).toUpperCase() + a.state.slice(1);
-    return a;
+    $http({
+      method: 'GET',
+      url: 'http://localhost:8000/fishers/1'
+    }).then(function(fisher) {
+      $scope.user = fisher.data;
+      $scope.user.password = '********';
+      $scope.user.image = function() {
+        var img = new Image();
+        img.src = $scope.fisher.image_url;
+        return img;
+      }
+    })
   }
 
   // SCOPE FUNCTIONS //

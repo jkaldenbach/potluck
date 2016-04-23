@@ -17,7 +17,7 @@ class Deployment(models.Model):
     )
     name = models.CharField(max_length=50)
     count = models.IntegerField(default=1, validators=[at_least_one])
-    loss_count = models.IntegerField(blank=True, validators=[at_least_one])
+    loss_count = models.IntegerField(blank=True, null=True, validators=[at_least_one])
     loss_public = models.BooleanField(default=False)
     state = models.CharField(
         max_length=20,
@@ -57,3 +57,13 @@ class Location(models.Model):
 
     def __str__(self):
         return '%s - %s - %s' % (self.id, self.deployment, self.timestamp)
+
+class Fisher(models.Model):
+    id = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=50, default="Ishmael")
+    password = models.CharField(max_length=50, default="********")
+    license = models.CharField(max_length=50, blank=True, null=True)
+    image_url = models.CharField(max_length=200, blank=True, null=True)
+
+    def __str__(self):
+        return '%s %s' % (self.name, self.license);

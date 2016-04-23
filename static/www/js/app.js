@@ -60,6 +60,16 @@ var nameApp = angular.module('starter', ['ionic', 'starter.controllers', 'starte
     }
   })
 
+  .state('tab.report', {
+    url: '/report',
+    views: {
+      'tab-dash': {
+        templateUrl: 'templates/tab-report.html',
+        controller: 'ReportCtrl'
+      }
+    }
+  })
+
   .state('tab.deploy', {
     url: '/deploy',
     views: {

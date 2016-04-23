@@ -2,8 +2,8 @@ from rest_framework import viewsets
 from rest_framework.decorators import list_route
 from rest_framework.response import Response
 
-from .models import Pot, Location, Deployment
-from .serializers import PotSerializer, LocationSerializer, DeploymentSerializer
+from .models import Pot, Location, Deployment, Fisher
+from .serializers import PotSerializer, LocationSerializer, DeploymentSerializer, FisherSerializer
 
 class PotViewSet(viewsets.ModelViewSet):
     queryset = Pot.objects.all()
@@ -28,3 +28,7 @@ class DeploymentViewSet(viewsets.ModelViewSet):
         lost_pots = Deployment.objects.filter(state="lost", loss_public=True)
         serializer = DeploymentSerializer(lost_pots, many=True)
         return Response(serializer.data)
+
+class FisherViewSet(viewsets.ModelViewSet):
+    queryset = Fisher.objects.all()
+    serializer_class = FisherSerializer
