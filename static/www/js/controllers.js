@@ -31,7 +31,7 @@ angular.module('starter.controllers', ['ui.router'])
   ];
 })
 
-.controller('DeployCtrl', function($scope, mapService, $http, $ionicLoading) {
+.controller('DeployCtrl', function($scope, mapService, $http, $ionicLoading, $ionicPopup) {
   $scope.pots = [];
   $scope.waitingForLocation = true;
 
@@ -44,20 +44,29 @@ angular.module('starter.controllers', ['ui.router'])
   };
 
   $scope.submitDeployment = function(pot){
-    $ionicLoading.show({
-      template: 'Saving information...'
+    $ionicPopup.confirm({
+      title: 'Confirmation',
+      template: 'You are about to deploy'
+    }).then(function(res) {
+      if(res){
+        $scope.deployment.name += pot.id;
+        $scope.deployment.pot = pot.id;
+
+        $http.post('http://localhost:8000/deployments/', $scope.deployment).then(function(response){
+          console.log(response);
+          $ionicLoading.hide();
+        });
+      }
+      else{
+        $scope.deployment = {
+          name: new Date().getMonth() + "/" + new Date().getDate() + "/" + new Date().getFullYear(),
+          count: 1,
+          loss_count: 0,
+          loss_public: false,
+          state: "deployed"
+        };
+      }
     });
-
-    console.log(pot);
-    $scope.deployment.name += pot.id;
-    $scope.deployment.pot = pot.id;
-
-    console.log($scope.deployment);
-
-    $http.post('http://localhost:8000/deployments/', $scope.deployment).then(function(response){
-      console.log(response);
-      $ionicLoading.hide();
-    })
   };
 
   function init() {

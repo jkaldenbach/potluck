@@ -2,11 +2,11 @@
   <ion-content class="padding" data-tap-disabled="false">
     <div class="angular-google-map" id="gmap-deploy"></div>
     <ion-item ng-repeat="pot in pots" ng-hide="waitingForLocation">
-      <ion-checkbox ng-click="submitDeployment(pot)"
+      <ion-radio ng-click="submitDeployment(pot)"
           ng-model="deployment.pot"
           ng-value="{{ pot.id }}">
             {{ pot.name }}
-      </ion-checkbox>
+      </ion-radio>
     </ion-item>
     <ion-item ng-show="!waitingForLocation && pots.length === 0">
       No pots added!
