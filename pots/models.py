@@ -15,8 +15,8 @@ class Pot(models.Model):
     )
 
     id = models.AutoField(primary_key=True)
-    name = models.CharField(max_length=20)
     color = models.CharField(max_length=6)
+    name = models.CharField(max_length=50)
     size = models.CharField(
         max_length=20,
         choices=POT_SIZES
@@ -25,14 +25,32 @@ class Pot(models.Model):
         max_length=20,
         choices=POT_STATES
     )
+    pot_set = models.ForeignKey('PotSet',
+        null=True,
+        related_name='pots',
+    )
+
+    def __str__(self):
+        return self.name
+
+class PotSet(models.Model):
+    id = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=50)
+    color = models.CharField(max_length=6)
 
     def __str__(self):
         return self.name
 
 class Location(models.Model):
-
     id = models.AutoField(primary_key=True)
-    pot = models.ForeignKey('Pot', related_name='locations')
+    pot = models.ForeignKey('Pot',
+        related_name='locations',
+        null=True,
+    )
+    pot_set = models.ForeignKey('PotSet',
+        related_name='locations',
+        null=True,
+    )
     latitude = models.DecimalField(max_digits=9, decimal_places=6)
     longitude = models.DecimalField(max_digits=9, decimal_places=6)
     timestamp = models.DateTimeField()
