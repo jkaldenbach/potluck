@@ -15,43 +15,69 @@ angular.module('starter.controllers', ['ui.router'])
 
 })
 
-.controller('DeployCtrl', function($scope, mapService, $http) {
+.controller('DeployCtrl', function($scope, mapService, $http, $ionicLoading) {
   $scope.pots = [];
+  $scope.waitingForLocation = true;
+
+  $scope.deployment = {
+    name: new Date().getMonth() + "/" + new Date().getDate() + "/" + new Date().getFullYear(),
+    count: 1,
+    loss_count: 0,
+    loss_public: false,
+    state: "deployed"
+  };
+
+  $scope.submitDeployment = function(pot){
+    $ionicLoading.show({
+      template: 'Saving information...'
+    });
+
+    console.log(pot);
+    $scope.deployment.name += pot.id;
+    $scope.deployment.pot = pot.id;
+
+    console.log($scope.deployment);
+
+    $http.post('http://localhost:8000/deployments/', $scope.deployment).then(function(response){
+      console.log(response);
+      $ionicLoading.hide();
+    })
+  };
 
   function init() {
+    $ionicLoading.show({
+      template: 'Loading information...'
+    });
     $http({
       method: 'GET',
       url: 'http://localhost:8000/pots/'
     }).then(function (res) {
       var i,
       arr = [],
-      data = res.data,
-      len = res.data.length;
+      data = res.data;
 
       if (data) {
-        arr = data.filter(prepPots);
-        $scope.pots = arr;
+        $scope.pots = data;
       }
-      navigator.geolocation.getCurrentPosition(function(position) {
-        var pos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude),
-            markerOptions = mapService.setupMarker(event, map),
-            position = {
-              lat: pos.k,
-              lng: pos.B
-            },
-            markerOptions = mapService.setupMarker(event, map);
 
-        console.log(pos);
-        $scope.map.setCenter(pos);
+      navigator.geolocation.getCurrentPosition(function(position) {
+        var pos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+        var markerOptions = mapService.setupMarker(position, map);
+
+        position = {
+          lat: pos.lat(),
+          lng: pos.lng()
+        };
+
+        map.setCenter(pos);
         $scope.newMarker = new google.maps.Marker(markerOptions);
+
+        $scope.waitingForLocation = false;
+        $ionicLoading.hide();
+
+        $scope.$apply();
       });
     });
-  }
-
-  function prepPots(a) {
-    a.name = !a.name ? "Pot" : a.name;
-    a.state = a.state.charAt(0).toUpperCase() + a.state.slice(1);
-    return a;
   }
 
   var mapOptions = {
@@ -63,15 +89,6 @@ angular.module('starter.controllers', ['ui.router'])
   },
   map = new google.maps.Map(document.getElementById("gmap-deploy"), mapOptions),
   processing = false;
-
-  // google.maps.event.addListener(map, 'bounds_changed', function(){
-  //   if(!processing){
-  //     processing = true;
-  //     setTimeout(function(){
-  //       processing = false;
-  //     }, 250);
-  //   }
-  // });
   google.maps.event.addListener(map, 'click', function(event){
     var markerOptions = mapService.setupMarker(event, map);
 
@@ -147,10 +164,10 @@ angular.module('starter.controllers', ['ui.router'])
   }
 
   function prepPots(a) {
-    a.name = !a.name ? "Pot" : a.name;
-    a.size = a.size == "lg" ? "Large" : "Small";
-    a.buoy = "./img/buoy.jpg";
-    a.state = a.state.charAt(0).toUpperCase() + a.state.slice(1);
+    // a.name = !a.name ? "Pot" : a.name;
+    // a.size = a.size == "lg" ? "Large" : "Small";
+    // a.buoy = "./img/buoy.jpg";
+    // a.state = a.state.charAt(0).toUpperCase() + a.state.slice(1);
     return a;
   }
 

@@ -61,6 +61,20 @@ angular.module('starter.services', [])
         };
       }
 
+      if(typeof clickEvent.lat == "function"){
+        position = {
+          lat: clickEvent.lat(),
+          lng: clickEvent.lng()
+        }
+      }
+
+      if(clickEvent.coords){
+        position = {
+          lat: clickEvent.coords.latitude,
+          lng: clickEvent.coords.longitude
+        }
+      }
+
       markerOptions = {
         map: map,
         title: new Date().toString(),

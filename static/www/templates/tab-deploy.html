@@ -1,9 +1,15 @@
 <ion-view view-title="Deploy">
   <ion-content class="padding" data-tap-disabled="false">
     <div class="angular-google-map" id="gmap-deploy"></div>
-    <ion-item ng-repeat="pot in pots">
-      <ion-label>Pot</ion-label>
-      <ion-checkbox class="border-none" checked="false"></ion-checkbox>
+    <ion-item ng-repeat="pot in pots" ng-hide="waitingForLocation">
+      <ion-checkbox ng-click="submitDeployment(pot)"
+          ng-model="deployment.pot"
+          ng-value="{{ pot.id }}">
+            {{ pot.name }}
+      </ion-checkbox>
+    </ion-item>
+    <ion-item ng-show="!waitingForLocation && pots.length === 0">
+      No pots added!
     </ion-item>
   </ion-content>
 </ion-view>
