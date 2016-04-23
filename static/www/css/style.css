@@ -52,3 +52,9 @@ div.scroll {
 .angular-google-map-container {
   height: 90%;
 }
+.angular-google-map {
+  height: 90%;
+}
+div.scroll {
+  height: 90%
+}

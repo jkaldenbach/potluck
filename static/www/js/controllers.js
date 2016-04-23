@@ -15,8 +15,7 @@ angular.module('starter.controllers', ['ui.router'])
 
 })
 
-.controller('DeployCtrl', function($scope, $http) {
-  $scope.map = { center: { latitude: 32.7909800, longitude: -79.9261000 }, zoom: 15 };
+.controller('DeployCtrl', function($scope, mapService, $http) {
   $scope.pots = [];
 
   function init() {
@@ -32,8 +31,50 @@ angular.module('starter.controllers', ['ui.router'])
       if (data) {
         $scope.pots = data;
       }
+      navigator.geolocation.getCurrentPosition(function(position) {
+        var pos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude),
+            markerOptions = mapService.setupMarker(event, map),
+            position = {
+              lat: pos.k,
+              lng: pos.B
+            },
+            markerOptions = mapService.setupMarker(event, map);
+
+        console.log(pos);
+        $scope.map.setCenter(pos);
+        $scope.newMarker = new google.maps.Marker(markerOptions);
+      });
     });
   }
+
+  var mapOptions = {
+    center: {
+      lat: 45,
+      lng: -73
+    },
+    zoom: 8
+  },
+  map = new google.maps.Map(document.getElementById("gmap-deploy"), mapOptions),
+  processing = false;
+
+  // google.maps.event.addListener(map, 'bounds_changed', function(){
+  //   if(!processing){
+  //     processing = true;
+  //     setTimeout(function(){
+  //       processing = false;
+  //     }, 250);
+  //   }
+  // });
+  google.maps.event.addListener(map, 'click', function(event){
+    var markerOptions = mapService.setupMarker(event, map);
+
+    if($scope.newMarker){
+      $scope.newMarker.setPosition(markerOptions.position)
+    }
+    else{
+      $scope.newMarker = new google.maps.Marker(markerOptions);
+    }
+  });
 
   init();
 
@@ -74,7 +115,7 @@ angular.module('starter.controllers', ['ui.router'])
     $http({
       method: 'GET',
       url: 'http://localhost:8000/pots/'
-    }).then(function (res) {
+    }).then(function(res) {
       var i,
       arr = [],
       data = res.data,
