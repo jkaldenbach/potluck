@@ -1,8 +1,9 @@
 <ion-view view-title="Deploy">
   <ion-content class="padding" data-tap-disabled="false">
-    <div class="angular-google-map" id="gmap-deploy">
-
-    </div>
-    <!-- <ui-gmap-google-map center='map.center' zoom='map.zoom'></ui-gmap-google-map> -->
+    <div class="angular-google-map" id="gmap-deploy"></div>
+    <ion-item ng-repeat="pot in pots">
+      <ion-label>Pot</ion-label>
+      <ion-checkbox class="border-none" checked="false"></ion-checkbox>
+    </ion-item>
   </ion-content>
 </ion-view>

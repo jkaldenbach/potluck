@@ -52,15 +52,20 @@ angular.module('starter.services', [])
 .service('mapService', function(){
   return {
     setupMarker: function setupMarker(clickEvent, map){
-      var position = {
-        lat: clickEvent.latLng.lat(),
-        lng: clickEvent.latLng.lng(),
-      },
+      var position = clickEvent, markerOptions;
+
+      if(clickEvent.latLng){
+        position = {
+          lat: clickEvent.latLng.lat(),
+          lng: clickEvent.latLng.lng(),
+        };
+      }
+
       markerOptions = {
         map: map,
         title: new Date().toString(),
         position: position
-      }
+      };
 
       return markerOptions
     }
