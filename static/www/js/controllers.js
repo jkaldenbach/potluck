@@ -15,9 +15,36 @@ angular.module('starter.controllers', ['ui.router'])
 
 })
 
-.controller('DeployCtrl', function($scope) {
-  $scope.map = { center: { latitude: 45, longitude: -73 }, zoom: 8 };
+.controller('DeployCtrl', function($scope, mapService) {
+  var mapOptions = {
+    center: {
+      lat: 45,
+      lng: -73
+    },
+    zoom: 8
+  },
+  map = new google.maps.Map(document.getElementById("gmap-deploy"), mapOptions),
+  processing = false;
 
+  google.maps.event.addListener(map, 'bounds_changed', function(){
+    if(!processing){
+      processing = true;
+      setTimeout(function(){
+        processing = false;
+      }, 250);
+    }
+  });
+
+  google.maps.event.addListener(map, 'click', function(event){
+    var markerOptions = mapService.setupMarker(event, map);
+
+    if($scope.newMarker){
+      $scope.newMarker.setPosition(markerOptions.position)
+    }
+    else{
+      $scope.newMarker = new google.maps.Marker(markerOptions);
+    }
+  });
 })
 
 .controller('AccountCtrl', function($scope, $http, $ionicModal) {
@@ -43,7 +70,7 @@ angular.module('starter.controllers', ['ui.router'])
     $http({
       method: 'GET',
       url: 'http://localhost:8000/pots/'
-    }).then(function (res) {
+    }).then(function(res) {
       var i,
       arr = [],
       data = res.data,
