@@ -5,14 +5,30 @@ angular.module('starter.controllers', ['ui.router'])
     $state.go('tab.deploy');
   };
 
-  $scope.check = function() {
-    $state.go('check');
+  $scope.map = function() {
+    $state.go('tab.map');
   };
 
-  $scope.claim = function() {
-    $state.go('claim');
+  $scope.report = function() {
+    $state.go('tab.report');
   };
 
+  $scope.retrieve = function() {
+    $state.go('tab.retrieve');
+  };
+
+})
+
+.controller('ReportCtrl', function($scope, $state) {
+  $scope.deployment = [
+    {value: "Red", code: "red"},
+    {value: "Yellow", code: "ylw"},
+    {value: "Green", code: "grn"},
+    {value: "Blue", code: "blu"},
+    {value: "Purple", code: "prp"},
+    {value: "White", code: "wht"},
+    {value: "Black", code: "blk"}
+  ];
 })
 
 .controller('DeployCtrl', function($scope, mapService, $http) {
@@ -33,14 +49,13 @@ angular.module('starter.controllers', ['ui.router'])
       }
       navigator.geolocation.getCurrentPosition(function(position) {
         var pos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude),
-            markerOptions = mapService.setupMarker(event, map),
-            position = {
-              lat: pos.k,
-              lng: pos.B
-            },
-            markerOptions = mapService.setupMarker(event, map);
+          markerOptions = mapService.setupMarker(event, map);
 
-        console.log(pos);
+        position = {
+          lat: pos.k,
+          lng: pos.B
+        };
+
         $scope.map.setCenter(pos);
         $scope.newMarker = new google.maps.Marker(markerOptions);
       });
@@ -69,7 +84,7 @@ angular.module('starter.controllers', ['ui.router'])
     var markerOptions = mapService.setupMarker(event, map);
 
     if($scope.newMarker){
-      $scope.newMarker.setPosition(markerOptions.position)
+      $scope.newMarker.setPosition(markerOptions.position);
     }
     else{
       $scope.newMarker = new google.maps.Marker(markerOptions);
