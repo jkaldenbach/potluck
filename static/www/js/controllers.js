@@ -20,15 +20,13 @@ angular.module('starter.controllers', ['ui.router'])
 })
 
 .controller('ReportCtrl', function($scope, $state) {
-  $scope.deployment = [
-    {value: "Red", code: "red"},
-    {value: "Yellow", code: "ylw"},
-    {value: "Green", code: "grn"},
-    {value: "Blue", code: "blu"},
-    {value: "Purple", code: "prp"},
-    {value: "White", code: "wht"},
-    {value: "Black", code: "blk"}
+  $scope.deployments = [
+    {name: "Pot1", state: "Lost", count: "10", lost_count: ""},
+    {name: "Pot2", state: "Lost", count: "10", lost_count: ""},
+    {name: "Pot3", state: "Lost", count: "10", lost_count: ""}
   ];
+
+
 })
 
 .controller('DeployCtrl', function($scope, mapService, $http, $ionicLoading) {
@@ -57,7 +55,7 @@ angular.module('starter.controllers', ['ui.router'])
     $http.post('http://localhost:8000/deployments/', $scope.deployment).then(function(response){
       console.log(response);
       $ionicLoading.hide();
-    })
+    });
   };
 
   function init() {
@@ -176,8 +174,8 @@ angular.module('starter.controllers', ['ui.router'])
         var img = new Image();
         img.src = $scope.fisher.image_url;
         return img;
-      }
-    })
+      };
+    });
   }
 
   // SCOPE FUNCTIONS //
@@ -193,7 +191,6 @@ angular.module('starter.controllers', ['ui.router'])
   };
 
   $scope.savePot = function(a) {
-    a.size = a.size.code;
     a.state = "deployed";
 
     $http({
@@ -208,7 +205,7 @@ angular.module('starter.controllers', ['ui.router'])
   };
 
   $scope.buttonCheck = function() {
-    if ($scope.newPot.name && $scope.newPot.color && $scope.newPot.size) {
+    if ($scope.newPot.name && $scope.newPot.type && $scope.newPot.base && $scope.newPot.contrast && $scope.newPot.placement && $scope.newPot.top && $scope.newPot.middle && $scope.newPot.bottom) {
       return false;
     } else {
       return true;

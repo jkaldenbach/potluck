@@ -9,8 +9,12 @@
     </div>
 
     <ion-item ng-repeat="deployment in deployments">
-      <ion-label>Pot</ion-label>
-      <ion-checkbox class="border-none" checked="false"></ion-checkbox>
+      <label><b>Name:</b> {{deployment.name}}</label><br>
+      <label><b>Status:</b> {{deployment.state}}</label><br>
+      <label><b>Original Count:</b>: {{deployment.count}}</label><br>
+      <label><b>Lost Count:</b></label>
+      <input ng-model="loss_count"></input>
+      <ion-checkbox class="border-none" checked="false"> Submit Publicly?</ion-checkbox>
     </ion-item>
 
   </ion-content>
