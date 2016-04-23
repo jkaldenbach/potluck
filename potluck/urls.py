@@ -6,6 +6,7 @@ from pots import views
 router = routers.DefaultRouter()
 router.register(r'pots', views.PotViewSet)
 router.register(r'locations', views.LocationViewSet)
+router.register(r'deployments', views.DeploymentViewSet)
 
 urlpatterns = [
     url(r'^', include(router.urls)),
