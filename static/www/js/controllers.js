@@ -190,13 +190,11 @@ angular.module('starter.controllers', ['ui.router'])
     $scope.pots.splice(index, 1);
   };
 
-  $scope.savePot = function(a) {
-    a.state = "deployed";
-
+  $scope.savePot = function(pot) {
     $http({
       method: 'POST',
       url: 'http://localhost:8000/pots/',
-      data: {pot:a}
+      data: pot
     }).then(function (res) {
       console.log(res);
     });

@@ -92,35 +92,35 @@
         </label>
         <label class="item item-input">
           <span class="input-label">Type</span>
-          <select ng-model="newPot.type" ng-options="type as type.value for type in types" />
+          <select ng-model="newPot.type" ng-options="type.value as type.value for type in types" />
         </label>
         <!-- LINE -->
         <div class="m5"><b>Line Markings</b></div>
         <label class="item item-input">
           <span class="input-label">Base Color</span>
-          <select ng-model="newPot.base" ng-options="color as color.value for color in colors track by color.code" />
+          <select ng-model="newPot.base" ng-options="color.value as color.value for color in colors track by color.code" />
         </label>
         <label class="item item-input">
           <span class="input-label">Contrast Color</span>
-          <select ng-model="newPot.contrast" ng-options="color as color.value for color in colors track by color.code" />
+          <select ng-model="newPot.contrast" ng-options="color.value as color.value for color in colors track by color.code" />
         </label>
         <label class="item item-input">
           <span class="input-label">Placement</span>
-          <select ng-model="newPot.placement" ng-options="placement as placement.value for placement in placements track by placement.code" />
+          <select ng-model="newPot.placement" ng-options="placement.value as placement.value for placement in placements track by placement.code" />
         </label>
         <!-- BOUY -->
         <div class="m5"><b>Buoy Markings</b></div>
         <label class="item item-input">
           <span class="input-label">Top Color</span>
-          <select ng-model="newPot.top" ng-options="color as color.value for color in colors track by color.code" />
+          <select ng-model="newPot.top" ng-options="color.value as color.value for color in colors track by color.code" />
         </label>
         <label class="item item-input">
           <span class="input-label">Middle Color</span>
-          <select ng-model="newPot.middle" ng-options="color as color.value for color in colors track by color.code" />
+          <select ng-model="newPot.middle" ng-options="color.value as color.value for color in colors track by color.code" />
         </label>
         <label class="item item-input">
           <span class="input-label">Bottom Color</span>
-          <select ng-model="newPot.bottom" ng-options="color as color.value for color in colors track by color.code" />
+          <select ng-model="newPot.bottom" ng-options="color.value as color.value for color in colors track by color.code" />
         </label>
 
         <button class="button button-full button-balanced" ng-click="savePot(newPot)" ng-disabled="buttonCheck()">Create</button>
