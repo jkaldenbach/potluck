@@ -7,6 +7,7 @@ router = routers.DefaultRouter()
 router.register(r'pots', views.PotViewSet)
 router.register(r'locations', views.LocationViewSet)
 router.register(r'deployments', views.DeploymentViewSet)
+router.register(r'fishers', views.FisherViewSet)
 
 urlpatterns = [
     url(r'^', include(router.urls)),

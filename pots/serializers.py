@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Pot, Location, Deployment
+from .models import Pot, Location, Deployment, Fisher
 
 class LocationSerializer(serializers.ModelSerializer):
     class Meta:
@@ -17,3 +17,8 @@ class DeploymentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Deployment
         fields = ('name', 'pot', 'count', 'loss_count', 'loss_public', 'state', 'locations', 'pot')
+
+class FisherSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Fisher
+        fields = ('name', 'license', 'image_url')

@@ -30,17 +30,9 @@ angular.module('starter.controllers', ['ui.router'])
       len = res.data.length;
 
       if (data) {
-        arr = data.filter(prepPots);
-        $scope.pots = arr;
+        $scope.pots = data;
       }
     });
-  }
-
-  function prepPots(a) {
-    a.name = !a.name ? "Pot" : a.name;
-    a.size = a.size == "lg" ? "Large" : "Small";
-    a.state = a.state.charAt(0).toUpperCase() + a.state.slice(1);
-    return a;
   }
 
   init();
@@ -76,17 +68,6 @@ angular.module('starter.controllers', ['ui.router'])
     {value: "Eel"}
   ];
 
-  $scope.user = {
-    name: "Ishmael",
-    password: "*******",
-    license: "SC-1044D",
-    image: function() {
-      var img = new Image();
-      img.src = "www/img/buoy.jpg";
-      return img;
-    }
-  };
-
   // FUNCTIONS //
 
   function init() {
@@ -100,18 +81,22 @@ angular.module('starter.controllers', ['ui.router'])
       len = res.data.length;
 
       if (data) {
-        arr = data.filter(prepPots);
-        $scope.pots = arr;
+        $scope.pots = data;
       }
     });
-  }
 
-  function prepPots(a) {
-    a.name = !a.name ? "Pot" : a.name;
-    a.size = a.size == "lg" ? "Large" : "Small";
-    a.buoy = "./img/buoy.jpg";
-    a.state = a.state.charAt(0).toUpperCase() + a.state.slice(1);
-    return a;
+    $http({
+      method: 'GET',
+      url: 'http://localhost:8000/fishers/1'
+    }).then(function(fisher) {
+      $scope.user = fisher.data;
+      $scope.user.password = '********';
+      $scope.user.image = function() {
+        var img = new Image();
+        img.src = $scope.fisher.image_url;
+        return img;
+      }
+    })
   }
 
   // SCOPE FUNCTIONS //
