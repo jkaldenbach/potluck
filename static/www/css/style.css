@@ -13,8 +13,17 @@
   float:right;
 }
 
+.breaker {
+  border-top:1px solid #EEE;
+  margin-bottom:5px;
+}
+
 .m5 {
   margin:5px;
+}
+
+.border-none {
+  border: none;
 }
 
 .btnz {
@@ -32,6 +41,14 @@
   background-color:#EEE;
 }
 
+div.scroll {
+  height:90%;
+}
+
+.angular-google-map {
+  height: 90%;
+}
+
 .angular-google-map-container {
-  height: 100%;
+  height: 90%;
 }

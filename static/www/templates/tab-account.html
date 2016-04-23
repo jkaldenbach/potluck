@@ -17,6 +17,11 @@
           <label>Password</label>
           <input type="text" ng-model="user.password"/>
         </ion-item>
+
+        <ion-item>
+          <label>License No.</label>
+          <input type="text" ng-model="user.license"/>
+        </ion-item>
       </ion-list>
     </ion-card>
 
@@ -28,18 +33,38 @@
     <ion-card>
       <ion-list>
         <ion-item ng-repeat="pot in pots">
-          <label>Name</label>
-          <input type="text" ng-model="pot.name" style="font-weight:bold"/>
-          <label>Color</label>
-          <input type="text" ng-model="pot.color" style="font-weight:bold"/>
-          <label>Size</label>
-          <input type="text" ng-model="pot.size" style="font-weight:bold"/>
-          <label>Status</label>
-          <input type="text" ng-model="pot.state" style="font-weight:bold"/>
+          <label style="font-weight:bold">Name</label>
+          <input type="text" ng-model="pot.name"/>
+          <label style="font-weight:bold">Type</label>
+          <input type="text" ng-model="pot.type"/>
+          <br>
+          <div><b>Line Markings</b></div>
+          <div class="breaker"></div>
+          <label style="font-weight:bold">Base Color</label>
+          <input type="text" ng-model="pot.base"/>
+          <label style="font-weight:bold">Contrast Color</label>
+          <input type="text" ng-model="pot.contrast"/>
+          <label style="font-weight:bold">Placement</label>
+          <input type="text" ng-model="pot.placement"/>
+          <br>
+          <div><b>Buoy Designation</b></div>
+          <div class="breaker"></div>
+          <label style="font-weight:bold">Top Color</label>
+          <input type="text" ng-model="pot.base"/>
+          <label style="font-weight:bold">Middle Color</label>
+          <input type="text" ng-model="pot.contrast"/>
+          <label style="font-weight:bold">Bottom Color</label>
+          <input type="text" ng-model="pot.placement"/>
+          <label style="font-weight:bold">Image</label>
+          <br>
+          <br>
+          <img ng-src="{{pot.buoy}}" height="150" />
+          <br>
+          <br>
           <button class="button button-clear button-assertive pull-right" ng-click="deletePot($index)">
             <div class="ion-ios-trash"> Delete</div>
           </button>
-          <button class="button button-clear button-positive pull-right" ng-click="deletePot($index)">
+          <button class="button button-clear button-positive pull-right" ng-click="editPot($index)">
             <div class="ion-edit"> Edit</div>
           </button>
         </ion-item>
@@ -66,13 +91,38 @@
           <input ng-model="newPot.name" type="text">
         </label>
         <label class="item item-input">
-          <span class="input-label">Color</span>
-          <input ng-model="newPot.color" type="text">
+          <span class="input-label">Type</span>
+          <select ng-model="newPot.type" ng-options="type as type.value for type in types" />
+        </label>
+        <!-- LINE -->
+        <div class="m5"><b>Line Markings</b></div>
+        <label class="item item-input">
+          <span class="input-label">Base Color</span>
+          <select ng-model="newPot.base" ng-options="color as color.value for color in colors track by color.code" />
         </label>
         <label class="item item-input">
-          <span class="input-label">Size</span>
-          <select ng-model="newPot.size" ng-options="color as color.value for color in colors track by color.code" />
+          <span class="input-label">Contrast Color</span>
+          <select ng-model="newPot.contrast" ng-options="color as color.value for color in colors track by color.code" />
         </label>
+        <label class="item item-input">
+          <span class="input-label">Placement</span>
+          <select ng-model="newPot.placement" ng-options="placement as placement.value for placement in placements track by placement.code" />
+        </label>
+        <!-- BOUY -->
+        <div class="m5"><b>Buoy Markings</b></div>
+        <label class="item item-input">
+          <span class="input-label">Top Color</span>
+          <select ng-model="newPot.top" ng-options="color as color.value for color in colors track by color.code" />
+        </label>
+        <label class="item item-input">
+          <span class="input-label">Middle Color</span>
+          <select ng-model="newPot.middle" ng-options="color as color.value for color in colors track by color.code" />
+        </label>
+        <label class="item item-input">
+          <span class="input-label">Bottom Color</span>
+          <select ng-model="newPot.bottom" ng-options="color as color.value for color in colors track by color.code" />
+        </label>
+
         <button class="button button-full button-balanced" ng-click="savePot(newPot)" ng-disabled="buttonCheck()">Create</button>
       </div>
     </ion-content>
