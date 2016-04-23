@@ -15,8 +15,35 @@ angular.module('starter.controllers', ['ui.router'])
 
 })
 
-.controller('DeployCtrl', function($scope) {
-  $scope.map = { center: { latitude: 45, longitude: -73 }, zoom: 8 };
+.controller('DeployCtrl', function($scope, $http) {
+  $scope.map = { center: { latitude: 32.7909800, longitude: -79.9261000 }, zoom: 15 };
+  $scope.pots = [];
+
+  function init() {
+    $http({
+      method: 'GET',
+      url: 'http://localhost:8000/pots/'
+    }).then(function (res) {
+      var i,
+      arr = [],
+      data = res.data,
+      len = res.data.length;
+
+      if (data) {
+        arr = data.filter(prepPots);
+        $scope.pots = arr;
+      }
+    });
+  }
+
+  function prepPots(a) {
+    a.name = !a.name ? "Pot" : a.name;
+    a.size = a.size == "lg" ? "Large" : "Small";
+    a.state = a.state.charAt(0).toUpperCase() + a.state.slice(1);
+    return a;
+  }
+
+  init();
 
 })
 
@@ -28,13 +55,36 @@ angular.module('starter.controllers', ['ui.router'])
   $scope.newPot = {};
 
   $scope.colors = [
-    {value: "Large", code: "lg"},
-    {value: "Small", code: "sm"}
+    {value: "Red", code: "red"},
+    {value: "Yellow", code: "ylw"},
+    {value: "Green", code: "grn"},
+    {value: "Blue", code: "blu"},
+    {value: "Purple", code: "prp"},
+    {value: "White", code: "wht"},
+    {value: "Black", code: "blk"}
+  ];
+
+  $scope.placements = [
+    {value: "Threaded", code: "thd"},
+    {value: "Banded", code: "bnd"}
+  ];
+
+  $scope.types = [
+    {value: "Lobster"},
+    {value: "Bass"},
+    {value: "Crab"},
+    {value: "Eel"}
   ];
 
   $scope.user = {
     name: "Ishmael",
-    password: "*******"
+    password: "*******",
+    license: "SC-1044D",
+    image: function() {
+      var img = new Image();
+      img.src = "www/img/buoy.jpg";
+      return img;
+    }
   };
 
   // FUNCTIONS //
@@ -59,6 +109,7 @@ angular.module('starter.controllers', ['ui.router'])
   function prepPots(a) {
     a.name = !a.name ? "Pot" : a.name;
     a.size = a.size == "lg" ? "Large" : "Small";
+    a.buoy = "./img/buoy.jpg";
     a.state = a.state.charAt(0).toUpperCase() + a.state.slice(1);
     return a;
   }
