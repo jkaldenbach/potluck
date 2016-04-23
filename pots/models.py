@@ -1,6 +1,7 @@
 from django.db import models
 
-# Create your models here.
+def at_least_one(value):
+    return value >= 1
 
 class Pot(models.Model):
     POT_SIZES=(
@@ -17,6 +18,7 @@ class Pot(models.Model):
     id = models.AutoField(primary_key=True)
     color = models.CharField(max_length=6)
     name = models.CharField(max_length=50)
+    count = models.IntegerField(default=1, validators=[at_least_one])
     size = models.CharField(
         max_length=20,
         choices=POT_SIZES
@@ -25,18 +27,6 @@ class Pot(models.Model):
         max_length=20,
         choices=POT_STATES
     )
-    pot_set = models.ForeignKey('PotSet',
-        null=True,
-        related_name='pots',
-    )
-
-    def __str__(self):
-        return self.name
-
-class PotSet(models.Model):
-    id = models.AutoField(primary_key=True)
-    name = models.CharField(max_length=50)
-    color = models.CharField(max_length=6)
 
     def __str__(self):
         return self.name
@@ -44,10 +34,6 @@ class PotSet(models.Model):
 class Location(models.Model):
     id = models.AutoField(primary_key=True)
     pot = models.ForeignKey('Pot',
-        related_name='locations',
-        null=True,
-    )
-    pot_set = models.ForeignKey('PotSet',
         related_name='locations',
         null=True,
     )
