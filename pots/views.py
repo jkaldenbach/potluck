@@ -19,12 +19,12 @@ class DeploymentViewSet(viewsets.ModelViewSet):
 
     @list_route()
     def lostPots(self, request):
-        lost_pots = Deployement.objects.filter(state="lost")
+        lost_pots = Deployment.objects.filter(state="lost")
         serializer = DeploymentSerializer(lost_pots, many=True)
         return Response(serializer.data)
 
     @list_route()
     def lostPublic(self, request):
-        lost_pots = Deployement.objects.filter(state="lost", loss_public=True)
+        lost_pots = Deployment.objects.filter(state="lost", loss_public=True)
         serializer = DeploymentSerializer(lost_pots, many=True)
         return Response(serializer.data)
