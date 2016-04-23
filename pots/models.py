@@ -15,6 +15,7 @@ class Pot(models.Model):
     )
 
     id = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=20)
     color = models.CharField(max_length=6)
     size = models.CharField(
         max_length=20,
@@ -26,7 +27,7 @@ class Pot(models.Model):
     )
 
     def __str__(self):
-        return str(self.id) + " " + self.color
+        return self.name
 
 class Location(models.Model):
 
@@ -37,4 +38,4 @@ class Location(models.Model):
     timestamp = models.DateTimeField()
 
     def __str__(self):
-        return str(self.id)
+        return '%s - %s - %s' % (self.id, self.pot, self.timestamp)

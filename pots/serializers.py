@@ -4,7 +4,7 @@ from rest_framework import serializers
 class LocationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Location
-        fields = ('longitude', 'latitude', 'timestamp')
+        fields = ('longitude', 'latitude', 'timestamp', 'pot')
 
 class PotSerializer(serializers.ModelSerializer):
     locations = LocationSerializer(many=True)
