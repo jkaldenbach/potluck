@@ -5,6 +5,10 @@
       <h1 class="title">Retrieve Pots</h1>
     </div><br><br><br>
 
+    <div class="card" style="padding:10px; padding-top:15px" ng-show="!check">
+      <p>No remaining lost pots to retrieve.</p>
+    </div>
+
     <ion-item ng-repeat="deployment in deployments">
       <label><b>Name:</b> {{deployment.name}}</label><br>
       <label><b>Status:</b> {{deployment.state}}</label><br>
@@ -15,8 +19,9 @@
         <option value="Yes">Yes</option>
         <option value="No">No</option>
       </select><br>
-      <button class="button button-clear button-positive pull-right">
-        <div> Retrieve</div>
+      <button class="button button-clear button-positive pull-right"
+        ng-click="retrievePot($index)">
+        Retrieve
       </button>
       <button class="button button-clear button-positive pull-left"
         ng-click="predictPot(deployment)">

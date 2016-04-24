@@ -58,12 +58,13 @@ angular.module('starter.controllers', ['ui.router'])
 /*******************************************************************/
 
 
-.controller('RetrieveCtrl', function($scope, $state) {
-  $scope.deployments = [
-    {name: "Pot1", state: "Deployed", count: "10", loss_count: ""},
-    {name: "Pot2", state: "Deployed", count: "10", loss_count: ""},
-    {name: "Pot3", state: "Deployed", count: "10", loss_count: ""}
-  ];
+.controller('RetrieveCtrl', function($scope, $state, $http) {
+  $scope.check = true;
+  // $scope.deployments = [
+  //   {name: "Pot1", state: "Deployed", count: "10", loss_count: ""},
+  //   {name: "Pot2", state: "Deployed", count: "10", loss_count: ""},
+  //   {name: "Pot3", state: "Deployed", count: "10", loss_count: ""}
+  // ];
 
   function getRange() {
     angular.forEach($scope.deployments, function(a) {
@@ -76,10 +77,26 @@ angular.module('starter.controllers', ['ui.router'])
     });
   }
 
-  getRange();
+  $http.get('http://localhost:8000/deployments')
+  .then(function(res) {
+    $scope.deployments = res.data.filter(function(dep) {
+      return dep.state !== 'Collected';
+    });
+    $scope.check = $scope.deployments.length ? true : false;
+  })
+  .then(getRange);
 
   $scope.predictPot = function(deployment) {
     $state.go('tab.predict', {pot: deployment})
+  };
+
+  $scope.retrievePot = function(index) {
+    var deployment = $scope.deployments[index];
+    deployment.state = "Collected";
+    console.log(deployment);
+    $http.patch('http://localhost:8000/deployments/' + deployment.id + '/', deployment);
+    $scope.deployments.splice(index, 1);
+    $scope.check = $scope.deployments.length ? true : false;
   };
 })
 
