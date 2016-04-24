@@ -15,9 +15,9 @@
         <option value="Yes">Yes</option>
         <option value="No">No</option>
       </select><br>
-      <button class="button button-clear button-positive pull-right">
-        ng-click="retrievePot(deployment)"
-        <div> Retrieve</div>
+      <button class="button button-clear button-positive pull-right"
+        ng-click="retrievePot($index)">
+        Retrieve
       </button>
       <button class="button button-clear button-positive pull-left"
         ng-click="predictPot(deployment)">

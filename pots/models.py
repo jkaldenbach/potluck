@@ -5,9 +5,9 @@ def at_least_one(value):
 
 class Deployment(models.Model):
     POT_STATES=(
-        ("deployed", "Deployed"),
-        ("lost", "Lost"),
-        ("collected", "Collected"),
+        ("Deployed", "Deployed"),
+        ("Lost", "Lost"),
+        ("Collected", "Collected"),
     )
 
     id = models.AutoField(primary_key=True)

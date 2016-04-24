@@ -58,7 +58,7 @@ angular.module('starter.controllers', ['ui.router'])
 /*******************************************************************/
 
 
-.controller('RetrieveCtrl', function($scope, $state) {
+.controller('RetrieveCtrl', function($scope, $state, $http) {
   $scope.deployments = [
     {name: "Pot1", state: "Deployed", count: "10", loss_count: ""},
     {name: "Pot2", state: "Deployed", count: "10", loss_count: ""},
@@ -78,7 +78,9 @@ angular.module('starter.controllers', ['ui.router'])
 
   $http.get('http://localhost:8000/deployments')
   .then(function(res) {
-    $scope.deployments = res.data;
+    $scope.deployments = res.data.filter(function(dep) {
+      return dep.state !== 'Collected';
+    });
   })
   .then(getRange);
 
@@ -88,8 +90,9 @@ angular.module('starter.controllers', ['ui.router'])
 
   $scope.retrievePot = function(index) {
     var deployment = $scope.deployments[index];
-    deployment.status = "Collected";
-    $http.put('https://localhost:8000/deployments' + deployment.id);
+    deployment.state = "Collected";
+    console.log(deployment);
+    $http.patch('http://localhost:8000/deployments/' + deployment.id + '/', deployment);
     $scope.deployments.splice(index, 1);
   };
 })
