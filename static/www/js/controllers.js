@@ -20,6 +20,7 @@ angular.module('starter.controllers', ['ui.router'])
 })
 
 .controller('ReportCtrl', function($scope, $state) {
+  $scope.check = true;
   $scope.deployments = [
     {name: "Pot1", state: "Lost", count: "10", loss_count: ""},
     {name: "Pot2", state: "Lost", count: "10", loss_count: ""},
@@ -28,6 +29,7 @@ angular.module('starter.controllers', ['ui.router'])
 
   $scope.submitReport = function(a) {
     $scope.deployments.splice(a,1);
+    $scope.check = $scope.deployments.length ? true : false;
   };
 
   function getRange() {

@@ -8,6 +8,10 @@
       <p><b>Note:</b> If one or several of your deployments have lost pots in their specific grouping, you can submit a Lost Pot Report, that will alert the respective authorities about your claim. You may also choose to share this information publicly to other commercial and recreational fisherman.</p>
     </div>
 
+    <div class="card" style="padding:10px; padding-top:15px" ng-show="!check">
+      <p>No remaining lost pots to report.</p>
+    </div>
+
     <ion-item ng-repeat="deployment in deployments">
       <label><b>Name:</b> {{deployment.name}}</label><br>
       <label><b>Status:</b> {{deployment.state}}</label><br>
