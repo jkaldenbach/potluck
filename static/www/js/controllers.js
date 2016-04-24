@@ -198,8 +198,8 @@ angular.module('starter.controllers', ['ui.router'])
 
   var mapOptions = {
     center: {
-      lat: 45,
-      lng: -73
+      lat: 33,
+      lng: -80
     },
     zoom: 8
   },
@@ -338,8 +338,8 @@ angular.module('starter.controllers', ['ui.router'])
 
   var mapOptions = {
     center: {
-      lat: 45,
-      lng: -73
+      lat: 33,
+      lng: -80
     },
     zoom: 8
   },
