@@ -431,6 +431,9 @@ angular.module('starter.controllers', ['ui.router'])
 
       if (data) {
         $scope.pots = data;
+        angular.forEach($scope.pots, function(pot) {
+          pot.image_url = '/static/www/img/buoy.jpg';
+        });
       }
     });
 
@@ -464,6 +467,7 @@ angular.module('starter.controllers', ['ui.router'])
   };
 
   $scope.savePot = function(pot) {
+    pot.image_url = '/static/img/buoy.jpg';
     $http({
       method: 'POST',
       url: '/pots/',
