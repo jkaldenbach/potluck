@@ -47,7 +47,7 @@ class Pot(models.Model):
 
 class Location(models.Model):
     id = models.AutoField(primary_key=True)
-    pot = models.ForeignKey('Pot',
+    pot = models.ForeignKey('Deployment',
         related_name='locations',
         null=True,
     )

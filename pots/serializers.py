@@ -4,7 +4,7 @@ from .models import Pot, Location, Deployment, Fisher
 class LocationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Location
-        fields = ('longitude', 'latitude', 'timestamp', 'pot', 'id')
+        fields = ('longitude', 'latitude', 'timestamp', 'deployment', 'id')
 
 class PotSerializer(serializers.ModelSerializer):
     class Meta:
