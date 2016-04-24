@@ -212,7 +212,13 @@ angular.module('starter.controllers', ['ui.router'])
   $scope.waitingForLocation = true;
 
   function showDeploymentModal(deployment){
-
+    var alertPopup = $ionicPopup.alert({
+     title: 'Deployment '+deployment.id,
+     template: 'Latitude: ' + deployment.latitude +
+     "\n Longitude: " + deployment.longitude +
+     "\n Pot: " + (deployment.pot ? deployment.pot.name : "No Pot Defined") +
+     "<br> Status: " + deployment.state
+   });
   }
 
   function init(){
@@ -238,12 +244,24 @@ angular.module('starter.controllers', ['ui.router'])
           $scope.deployments = response.data;
 
           $scope.deployments.forEach(function(deployment){
-            var icon = deployment.state === "deployed" ? "http://maps.google.com/mapfiles/kml/paddle/grn-blank-lv.png" : "http://maps.google.com/mapfiles/kml/paddle/red-blank-lv.png"
+            var icon;
+            switch(deployment.state){
+              case "deployed":
+                icon = "http://maps.google.com/mapfiles/kml/paddle/grn-circle-lv.png";
+                break;
+              case "lost":
+                icon = "http://maps.google.com/mapfiles/kml/paddle/red-circle-lv.png";
+                break;
+              default:
+                icon = "";
+            }
             var markerOptions = mapService.setupMarker(deployment, map, icon);
 
-            console.log(markerOptions);
-
             deployment.marker = new google.maps.Marker(markerOptions);
+
+            google.maps.event.addListener(deployment.marker, 'click', function(event){
+              showDeploymentModal(deployment);
+            });
           });
 
           console.log($scope.deployments);
@@ -253,6 +271,17 @@ angular.module('starter.controllers', ['ui.router'])
               lat: position.coords.latitude,
               lng: position.coords.longitude
             };
+
+            var markerOptions = mapService.setupMarker(position, map, "http://maps.google.com/mapfiles/kml/paddle/blu-circle-lv.png");
+            $scope.currentLocationMarker = new google.maps.Marker(markerOptions);
+            $scope.currentLocationMarker.setZIndex(0);
+
+            google.maps.event.addListener(deployment.marker, 'click', function(event){
+              $ionicPopup.alert({
+                title: 'Current Location',
+                template: 'This is your current location'
+              });
+            });
 
             map.setCenter(position);
 
