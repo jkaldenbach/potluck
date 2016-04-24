@@ -228,40 +228,38 @@ angular.module('starter.controllers', ['ui.router'])
   $scope.waitingForLocation = true;
 
   function showDeploymentModal(deployment){
-   var myPopup = $ionicPopup.show({
-   template: 'Latitude: ' + deployment.latitude +
-   "\n Longitude: " + deployment.longitude +
-   "\n Pot: " + (deployment.pot ? deployment.pot.name : "No Pot Defined") +
-   "<br> Status: " + deployment.state,
-   title: 'Deployment '+deployment.id,
-   scope: $scope,
-   buttons: [
-     {
-       text: 'Cancel',
-       type: 'button-default'
-     },
-     {
-       text: 'Report',
-       type: 'button-assertive',
-       onTap: function() {
-         deployment.state = "Lost";
-         $http.put('http://localhost:8000/deployments/' + deployment.id + '/', deployment).then(function(){
-           location.reload();
-         });
-       }
-     },
-     {
-       text: 'Retrieve',
-       type: 'button-energized',
-       onTap: function(){
-         deployment.state = "Collected";
-         $http.put('http://localhost:8000/deployments/' + deployment.id + '/', deployment).then(function(){
-           location.reload();
-         });
-       }
-     }
-   ]
- });
+    $ionicPopup.show({
+      template: 'Latitude: ' + deployment.latitude +
+      "\n Longitude: " + deployment.longitude +
+      "\n Pot: " + (deployment.pot ? deployment.pot.name : "No Pot Defined") +
+      "<br> Status: " + deployment.state,
+      title: 'Deployment '+deployment.id,
+      scope: $scope,
+      buttons: [
+        {
+          text: 'Cancel',
+          type: 'button-default'
+        },
+        {
+          text: 'Report',
+          type: 'button-assertive',
+          onTap: function() {
+            $http.patch('http://localhost:8000/deployments/' + deployment.id + '/', {id: deployment.id, state: "Lost"}).then(function(){
+              location.reload();
+            });
+          }
+        },
+        {
+          text: 'Retrieve',
+          type: 'button-energized',
+          onTap: function(){
+            $http.patch('http://localhost:8000/deployments/' + deployment.id + '/', {id: deployment.id, state: "Collected"}).then(function(){
+              location.reload();
+            });
+          }
+        }
+      ]
+    });
   }
 
   function init(){
