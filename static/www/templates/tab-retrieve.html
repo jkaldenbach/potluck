@@ -5,6 +5,10 @@
       <h1 class="title">Retrieve Pots</h1>
     </div><br><br><br>
 
+    <div class="card" style="padding:10px; padding-top:15px" ng-show="!check">
+      <p>No remaining lost pots to retrieve.</p>
+    </div>
+
     <ion-item ng-repeat="deployment in deployments">
       <label><b>Name:</b> {{deployment.name}}</label><br>
       <label><b>Status:</b> {{deployment.state}}</label><br>

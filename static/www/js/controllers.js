@@ -59,11 +59,12 @@ angular.module('starter.controllers', ['ui.router'])
 
 
 .controller('RetrieveCtrl', function($scope, $state, $http) {
-  $scope.deployments = [
-    {name: "Pot1", state: "Deployed", count: "10", loss_count: ""},
-    {name: "Pot2", state: "Deployed", count: "10", loss_count: ""},
-    {name: "Pot3", state: "Deployed", count: "10", loss_count: ""}
-  ];
+  $scope.check = true;
+  // $scope.deployments = [
+  //   {name: "Pot1", state: "Deployed", count: "10", loss_count: ""},
+  //   {name: "Pot2", state: "Deployed", count: "10", loss_count: ""},
+  //   {name: "Pot3", state: "Deployed", count: "10", loss_count: ""}
+  // ];
 
   function getRange() {
     angular.forEach($scope.deployments, function(a) {
@@ -81,6 +82,7 @@ angular.module('starter.controllers', ['ui.router'])
     $scope.deployments = res.data.filter(function(dep) {
       return dep.state !== 'Collected';
     });
+    $scope.check = $scope.deployments.length ? true : false;
   })
   .then(getRange);
 
@@ -94,6 +96,7 @@ angular.module('starter.controllers', ['ui.router'])
     console.log(deployment);
     $http.patch('http://localhost:8000/deployments/' + deployment.id + '/', deployment);
     $scope.deployments.splice(index, 1);
+    $scope.check = $scope.deployments.length ? true : false;
   };
 })
 
