@@ -26,6 +26,10 @@ angular.module('starter.controllers', ['ui.router'])
     {name: "Pot3", state: "Lost", count: "10", loss_count: ""}
   ];
 
+  $scope.submitReport = function(a) {
+    $scope.deployments.splice(a,1);
+  };
+
   function getRange() {
     angular.forEach($scope.deployments, function(a) {
       var int = parseInt(a.count);

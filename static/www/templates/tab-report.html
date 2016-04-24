@@ -13,13 +13,11 @@
       <label><b>Status:</b> {{deployment.state}}</label><br>
       <label><b>Original Count:</b> {{deployment.count}}</label><br>
       <label><b>Loss Count:</b></label>
-      <input ng-model="deployment.loss_count" style="border:1px solid #CCC" />
+      <input ng-model="deployment.loss_count" style="border:1px solid #CCC" type="number"/>
       <br>
       <label><b>Submit Publicly?</b></label>
       <input type="checkbox" ng-model="public"></input>
-      <button class="button button-clear button-positive pull-right">
-        <div>Submit</div>
-      </button>
+      <button class="button button-clear button-positive pull-right" ng-click="submitReport($index)">Submit</button>
     </ion-item>
   </ion-content>
 </ion-view>
