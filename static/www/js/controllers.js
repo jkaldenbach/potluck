@@ -263,10 +263,10 @@ angular.module('starter.controllers', ['ui.router'])
           $scope.deployments.forEach(function(deployment){
             var icon;
             switch(deployment.state){
-              case "deployed":
+              case "Deployed":
                 icon = "http://maps.google.com/mapfiles/kml/paddle/grn-circle-lv.png";
                 break;
-              case "lost":
+              case "Lost":
                 icon = "http://maps.google.com/mapfiles/kml/paddle/red-circle-lv.png";
                 break;
               default:
@@ -281,8 +281,6 @@ angular.module('starter.controllers', ['ui.router'])
             });
           });
 
-          console.log($scope.deployments);
-
           navigator.geolocation.getCurrentPosition(function(position) {
             position = {
               lat: position.coords.latitude,
@@ -293,7 +291,7 @@ angular.module('starter.controllers', ['ui.router'])
             $scope.currentLocationMarker = new google.maps.Marker(markerOptions);
             $scope.currentLocationMarker.setZIndex(0);
 
-            google.maps.event.addListener(deployment.marker, 'click', function(event){
+            google.maps.event.addListener($scope.currentLocationMarker, 'click', function(event){
               $ionicPopup.alert({
                 title: 'Current Location',
                 template: 'This is your current location'
