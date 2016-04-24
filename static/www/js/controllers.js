@@ -120,7 +120,7 @@ angular.module('starter.controllers', ['ui.router'])
     count: 1,
     loss_count: 0,
     loss_public: false,
-    state: "deployed",
+    state: "Deployed",
     locations: []
   };
 
@@ -156,7 +156,7 @@ angular.module('starter.controllers', ['ui.router'])
       count: 1,
       loss_count: 0,
       loss_public: false,
-      state: "deployed"
+      state: "Deployed"
     };
   }
 
