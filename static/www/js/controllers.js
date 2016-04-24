@@ -49,14 +49,16 @@ angular.module('starter.controllers', ['ui.router'])
     });
   }
 
-  $http.get('http://localhost:8000/deployments')
-  .then(function(res) {
-    $scope.deployments = res.data.filter(function(dep) {
-      return dep.state === 'Deployed';
-    });
-    $scope.check = $scope.deployments.length ? true : false;
-  })
-  .then(getRange);
+  $scope.$on('$ionicView.enter', function(){
+    $http.get('http://localhost:8000/deployments')
+    .then(function(res) {
+      $scope.deployments = res.data.filter(function(dep) {
+        return dep.state === 'Deployed';
+      });
+      $scope.check = $scope.deployments.length ? true : false;
+    })
+    .then(getRange);
+  });
 })
 
 /*******************************************************************/
@@ -77,14 +79,16 @@ angular.module('starter.controllers', ['ui.router'])
     });
   }
 
-  $http.get('http://localhost:8000/deployments')
-  .then(function(res) {
-    $scope.deployments = res.data.filter(function(dep) {
-      return dep.state !== 'Collected';
-    });
-    $scope.check = $scope.deployments.length ? true : false;
-  })
-  .then(getRange);
+  $scope.$on('$ionicView.enter', function(){
+    $http.get('http://localhost:8000/deployments')
+    .then(function(res) {
+      $scope.deployments = res.data.filter(function(dep) {
+        return dep.state !== 'Collected';
+      });
+      $scope.check = $scope.deployments.length ? true : false;
+    })
+    .then(getRange);
+  });
 
   $scope.predictPot = function(deployment) {
     $state.go('tab.predict', {pot: deployment})
@@ -216,7 +220,9 @@ angular.module('starter.controllers', ['ui.router'])
     }
   });
 
-  init();
+  $scope.$on('$ionicView.enter', function(){
+    init();
+  });
 
 })
 
@@ -346,7 +352,9 @@ angular.module('starter.controllers', ['ui.router'])
   map = new google.maps.Map(document.getElementById("gmap-pot-map"), mapOptions),
   processing = false;
 
-  init();
+  $scope.$on('$ionicView.enter', function(){
+    init();
+  });
 })
 
 /*******************************************************************/
@@ -421,7 +429,10 @@ angular.module('starter.controllers', ['ui.router'])
   };
 
   $scope.deletePot = function(index) {
-    $scope.pots.splice(index, 1);
+    $http.delete('http://localhost:8000/pots/' + $scope.pots[index].id + '/')
+    .then(function(){
+      $scope.pots.splice(index, 1);
+    })
   };
 
   $scope.savePot = function(pot) {
@@ -431,6 +442,7 @@ angular.module('starter.controllers', ['ui.router'])
       data: pot
     }).then(function (res) {
       console.log(res);
+      init();
     });
 
     $scope.modal.hide();
@@ -453,5 +465,7 @@ angular.module('starter.controllers', ['ui.router'])
   });
 
   // INIT //
-  init();
+  $scope.$on('$ionicView.enter', function(){
+    init();
+  });
 });
