@@ -6,7 +6,10 @@
 // 'starter.services' is found in services.js
 // 'starter.controllers' is found in controllers.js
 var nameApp = angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', 'uiGmapgoogle-maps'])
-
+.config(function($httpProvider) {
+    $httpProvider.defaults.xsrfCookieName = 'csrftoken'
+    $httpProvider.defaults.xsrfHeaderName = 'X-CSRFToken'
+});
 .run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
