@@ -29,11 +29,6 @@ angular.module('starter.controllers', ['ui.router'])
 
 .controller('ReportCtrl', function($scope, $state, $http) {
   $scope.check = true;
-  // $scope.deployments = [
-  //   {name: "Pot1", state: "Lost", count: "10", loss_count: ""},
-  //   {name: "Pot2", state: "Lost", count: "10", loss_count: ""},
-  //   {name: "Pot3", state: "Lost", count: "10", loss_count: ""}
-  // ];
 
   $scope.submitReport = function(index) {
     var deployment = $scope.deployments[index];
@@ -70,11 +65,6 @@ angular.module('starter.controllers', ['ui.router'])
 
 .controller('RetrieveCtrl', function($scope, $state, $http) {
   $scope.check = true;
-  // $scope.deployments = [
-  //   {name: "Pot1", state: "Deployed", count: "10", loss_count: ""},
-  //   {name: "Pot2", state: "Deployed", count: "10", loss_count: ""},
-  //   {name: "Pot3", state: "Deployed", count: "10", loss_count: ""}
-  // ];
 
   function getRange() {
     angular.forEach($scope.deployments, function(a) {
@@ -238,13 +228,40 @@ angular.module('starter.controllers', ['ui.router'])
   $scope.waitingForLocation = true;
 
   function showDeploymentModal(deployment){
-    var alertPopup = $ionicPopup.alert({
-     title: 'Deployment '+deployment.id,
-     template: 'Latitude: ' + deployment.latitude +
-     "\n Longitude: " + deployment.longitude +
-     "\n Pot: " + (deployment.pot ? deployment.pot.name : "No Pot Defined") +
-     "<br> Status: " + deployment.state
-   });
+   var myPopup = $ionicPopup.show({
+   template: 'Latitude: ' + deployment.latitude +
+   "\n Longitude: " + deployment.longitude +
+   "\n Pot: " + (deployment.pot ? deployment.pot.name : "No Pot Defined") +
+   "<br> Status: " + deployment.state,
+   title: 'Deployment '+deployment.id,
+   scope: $scope,
+   buttons: [
+     {
+       text: 'Cancel',
+       type: 'button-default'
+     },
+     {
+       text: 'Report',
+       type: 'button-assertive',
+       onTap: function() {
+         deployment.state = "Lost";
+         $http.put('http://localhost:8000/deployments/' + deployment.id + '/', deployment).then(function(){
+           location.reload();
+         });
+       }
+     },
+     {
+       text: 'Retrieve',
+       type: 'button-energized',
+       onTap: function(){
+         deployment.state = "Collected";
+         $http.put('http://localhost:8000/deployments/' + deployment.id + '/', deployment).then(function(){
+           location.reload();
+         });
+       }
+     }
+   ]
+ });
   }
 
   function init(){
@@ -281,13 +298,15 @@ angular.module('starter.controllers', ['ui.router'])
               default:
                 icon = "";
             }
-            var markerOptions = mapService.setupMarker(deployment, map, icon);
+            if(icon){
+              var markerOptions = mapService.setupMarker(deployment, map, icon);
 
-            deployment.marker = new google.maps.Marker(markerOptions);
+              deployment.marker = new google.maps.Marker(markerOptions);
 
-            google.maps.event.addListener(deployment.marker, 'click', function(event){
-              showDeploymentModal(deployment);
-            });
+              google.maps.event.addListener(deployment.marker, 'click', function(event){
+                showDeploymentModal(deployment);
+              });
+            }
           });
 
           navigator.geolocation.getCurrentPosition(function(position) {

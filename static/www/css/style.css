@@ -57,3 +57,7 @@
 div.scroll {
   height: 87.5%
 }
+
+.popup-buttons button.button {
+  font-size: 90%
+}
