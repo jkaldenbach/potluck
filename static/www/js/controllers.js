@@ -38,7 +38,7 @@ angular.module('starter.controllers', ['ui.router'])
   $scope.submitReport = function(index) {
     var deployment = $scope.deployments[index];
     deployment.state = "Lost";
-    $http.patch('http://localhost:8000/deployments/' + deployment.id + '/', deployment);
+    $http.put('http://localhost:8000/deployments/' + deployment.id + '/', deployment);
     $scope.deployments.splice(index, 1);
     $scope.check = $scope.deployments.length ? true : false;
   };
@@ -103,7 +103,7 @@ angular.module('starter.controllers', ['ui.router'])
   $scope.retrievePot = function(index) {
     var deployment = $scope.deployments[index];
     deployment.state = "Collected";
-    $http.patch('http://localhost:8000/deployments/' + deployment.id + '/', deployment);
+    $http.put('http://localhost:8000/deployments/' + deployment.id + '/', deployment);
     $scope.deployments.splice(index, 1);
     $scope.check = $scope.deployments.length ? true : false;
   };
