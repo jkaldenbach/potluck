@@ -59,6 +59,14 @@ angular.module('starter.controllers', ['ui.router'])
   }
 
   getRange();
+
+  $scope.predictPot = function(deployment) {
+    $state.go('tab.predict', {pot: deployment})
+  };
+})
+
+.controller('PredictCtrl', function($scope, $state) {
+  $scope.pot = $state.params.pot;
 })
 
 .controller('DeployCtrl', function($scope, mapService, $http, $ionicLoading) {
