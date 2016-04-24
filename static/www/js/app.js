@@ -78,6 +78,15 @@ var nameApp = angular.module('starter', ['ionic', 'starter.controllers', 'starte
         controller: 'DeployCtrl'
       }
     }
+  })
+  .state('tab.potMap', {
+    url: '/pot-map',
+    views: {
+      'tab-dash': {
+        templateUrl: 'templates/tab-pot-map.html',
+        controller: 'PotMapCtrl'
+      }
+    }
   });
 
   // if none of the above states are matched, use this as the fallback

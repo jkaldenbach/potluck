@@ -17,8 +17,13 @@ class Deployment(models.Model):
     )
     name = models.CharField(max_length=50)
     count = models.IntegerField(default=1, validators=[at_least_one])
+
     loss_count = models.IntegerField(blank=True, null=True, validators=[at_least_one])
     loss_public = models.BooleanField(default=False)
+
+    latitude = models.DecimalField(max_digits=9, decimal_places=6)
+    longitude = models.DecimalField(max_digits=9, decimal_places=6)
+
     state = models.CharField(
         max_length=20,
         choices=POT_STATES
@@ -47,12 +52,12 @@ class Pot(models.Model):
 
 class Location(models.Model):
     id = models.AutoField(primary_key=True)
-    pot = models.ForeignKey('Pot',
+    deployment = models.ForeignKey('Deployment',
         related_name='locations',
         null=True,
     )
-    latitude = models.DecimalField(max_digits=9, decimal_places=6)
-    longitude = models.DecimalField(max_digits=9, decimal_places=6)
+    latitude = models.DecimalField(max_digits=12, decimal_places=9)
+    longitude = models.DecimalField(max_digits=12, decimal_places=9)
     timestamp = models.DateTimeField()
 
     def __str__(self):
