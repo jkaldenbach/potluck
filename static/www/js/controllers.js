@@ -1,12 +1,16 @@
 angular.module('starter.controllers', ['ui.router'])
 
+/*******************************************************************/
+/*******************************************************************/
+
+
 .controller('DashCtrl', function($scope, $state) {
   $scope.deploy = function() {
     $state.go('tab.deploy');
   };
 
   $scope.map = function() {
-    $state.go('tab.map');
+    $state.go('tab.potMap');
   };
 
   $scope.report = function() {
@@ -18,6 +22,10 @@ angular.module('starter.controllers', ['ui.router'])
   };
 
 })
+
+/*******************************************************************/
+/*******************************************************************/
+
 
 .controller('ReportCtrl', function($scope, $state) {
   $scope.check = true;
@@ -45,6 +53,10 @@ angular.module('starter.controllers', ['ui.router'])
 
   getRange();
 })
+
+/*******************************************************************/
+/*******************************************************************/
+
 
 .controller('RetrieveCtrl', function($scope, $state) {
   $scope.deployments = [
@@ -82,11 +94,19 @@ angular.module('starter.controllers', ['ui.router'])
   };
 })
 
+/*******************************************************************/
+/*******************************************************************/
+
+
 .controller('PredictCtrl', function($scope, $state) {
   $scope.pot = $state.params.pot;
 })
 
-.controller('DeployCtrl', function($scope, mapService, $http, $ionicLoading) {
+/*******************************************************************/
+/*******************************************************************/
+
+
+.controller('DeployCtrl', function($scope, mapService, $http, $ionicLoading, $ionicPopup) {
   $scope.pots = [];
   $scope.waitingForLocation = true;
 
@@ -95,27 +115,47 @@ angular.module('starter.controllers', ['ui.router'])
     count: 1,
     loss_count: 0,
     loss_public: false,
-    state: "deployed"
+    state: "deployed",
+    locations: []
   };
 
   $scope.submitDeployment = function(pot){
-    $ionicLoading.show({
-      template: 'Saving information...'
-    });
+    $ionicPopup.confirm({
+      title: 'Confirmation',
+      template: 'You are about to deploy'
+    }).then(function(res) {
+      if(res){
+        $scope.deployment.name += pot.id;
+        $scope.deployment.pot = pot.id;
 
-    console.log(pot);
-    $scope.deployment.name += pot.id;
-    $scope.deployment.pot = pot.id;
+        $scope.deployment.latitude = $scope.newMarker.position.lat();
+        $scope.deployment.longitude = $scope.newMarker.position.lng();
 
-    console.log($scope.deployment);
+        console.log($scope.deployment);
 
-    $http.post('http://localhost:8000/deployments/', $scope.deployment).then(function(response){
-      console.log(response);
-      $ionicLoading.hide();
+        $http.post('http://localhost:8000/deployments/', $scope.deployment).then(function(response){
+          console.log(response);
+          $ionicLoading.hide();
+          resetDeployment();
+        });
+      }
+      else{
+        resetDeployment();
+      }
     });
   };
 
-  function init() {
+  function resetDeployment(){
+    $scope.deployment = {
+      name: new Date().getMonth() + "/" + new Date().getDate() + "/" + new Date().getFullYear(),
+      count: 1,
+      loss_count: 0,
+      loss_public: false,
+      state: "deployed"
+    };
+  }
+
+  function init(){
     $ionicLoading.show({
       template: 'Loading information...'
     });
@@ -174,6 +214,84 @@ angular.module('starter.controllers', ['ui.router'])
   init();
 
 })
+
+/*******************************************************************/
+/*******************************************************************/
+
+.controller('PotMapCtrl', function($scope, mapService, $http, $ionicLoading, $ionicPopup){
+  $scope.pots = [];
+  $scope.waitingForLocation = true;
+
+  function showDeploymentModal(deployment){
+
+  }
+
+  function init(){
+    $ionicLoading.show({
+      template: 'Loading information...'
+    });
+    $http({
+      method: 'GET',
+      url: 'http://localhost:8000/pots/'
+    }).then(function (res) {
+      var i,
+      arr = [],
+      data = res.data;
+
+      if (data) {
+        $scope.pots = data;
+      }
+      $http({
+        method: 'GET',
+        url: 'http://localhost:8000/deployments/'
+      }).then(function(response){
+        if(response.data){
+          $scope.deployments = response.data;
+
+          $scope.deployments.forEach(function(deployment){
+            var icon = deployment.state === "deployed" ? "http://maps.google.com/mapfiles/kml/paddle/grn-blank-lv.png" : "http://maps.google.com/mapfiles/kml/paddle/red-blank-lv.png"
+            var markerOptions = mapService.setupMarker(deployment, map, icon);
+
+            console.log(markerOptions);
+
+            deployment.marker = new google.maps.Marker(markerOptions);
+          });
+
+          console.log($scope.deployments);
+
+          navigator.geolocation.getCurrentPosition(function(position) {
+            position = {
+              lat: position.coords.latitude,
+              lng: position.coords.longitude
+            };
+
+            map.setCenter(position);
+
+            $scope.waitingForLocation = false;
+            $ionicLoading.hide();
+
+            $scope.$apply();
+          });
+        }
+      });
+    });
+  }
+
+  var mapOptions = {
+    center: {
+      lat: 45,
+      lng: -73
+    },
+    zoom: 8
+  },
+  map = new google.maps.Map(document.getElementById("gmap-pot-map"), mapOptions),
+  processing = false;
+
+  init();
+})
+
+/*******************************************************************/
+/*******************************************************************/
 
 .controller('AccountCtrl', function($scope, $http, $ionicModal) {
 
@@ -277,5 +395,4 @@ angular.module('starter.controllers', ['ui.router'])
 
   // INIT //
   init();
-
 });
