@@ -44,7 +44,6 @@ class FisherViewSet(viewsets.ModelViewSet):
     queryset = Fisher.objects.all()
     serializer_class = FisherSerializer
 
-@csrf_exempt
 def getStormData(request):
         return HttpResponse(
             json.dumps(services.get_storm_data(request.GET['start'], request.GET['end']))
