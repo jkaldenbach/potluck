@@ -59,11 +59,17 @@ angular.module('starter.controllers', ['ui.router'])
 
 
 .controller('RetrieveCtrl', function($scope, $state) {
+  $scope.check = true;
   $scope.deployments = [
     {name: "Pot1", state: "Deployed", count: "10", loss_count: ""},
     {name: "Pot2", state: "Deployed", count: "10", loss_count: ""},
     {name: "Pot3", state: "Deployed", count: "10", loss_count: ""}
   ];
+
+  $scope.retieve = function(a) {
+    $scope.deployments.splice(a,1);
+    $scope.check = $scope.deployments.length ? true : false;
+  };
 
   function getRange() {
     angular.forEach($scope.deployments, function(a) {
