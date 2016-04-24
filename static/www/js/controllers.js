@@ -140,10 +140,7 @@ angular.module('starter.controllers', ['ui.router'])
         $scope.deployment.latitude = $scope.newMarker.position.lat();
         $scope.deployment.longitude = $scope.newMarker.position.lng();
 
-        console.log($scope.deployment);
-
         $http.post('/deployments/', $scope.deployment).then(function(response){
-          console.log(response);
           $ionicLoading.hide();
           resetDeployment();
         });
@@ -236,8 +233,8 @@ angular.module('starter.controllers', ['ui.router'])
   function showDeploymentModal(deployment){
     $ionicPopup.show({
       template: 'Latitude: ' + deployment.latitude +
-      "\n Longitude: " + deployment.longitude +
-      "\n Pot: " + (deployment.pot ? deployment.pot.name : "No Pot Defined") +
+      "Longitude: " + deployment.longitude +
+      "Pot: " + (deployment.pot ? deployment.pot.name : "No Pot Defined") +
       "<br> Status: " + deployment.state,
       title: 'Deployment '+deployment.id,
       scope: $scope,
@@ -335,6 +332,8 @@ angular.module('starter.controllers', ['ui.router'])
             $scope.waitingForLocation = false;
             $ionicLoading.hide();
 
+            getStormData();
+
             $scope.$apply();
           });
         }
@@ -351,6 +350,35 @@ angular.module('starter.controllers', ['ui.router'])
   },
   map = new google.maps.Map(document.getElementById("gmap-pot-map"), mapOptions),
   processing = false;
+
+  function getStormData(){
+    $http.get('/storms/?start=20160410&end=20160424').then(function(response){
+      if(response.data){
+        var coords = [];
+        if(response.data.length > 4){
+          response.data = response.data.splice(0, 4);
+        }
+        response.data.forEach(function(storm){
+          storm.poly.forEach(function(point){
+            coords.push({
+              lat: parseFloat(point[1]),
+              lng: parseFloat(point[0])
+            });
+          });
+
+          // Construct the polygon.
+          new google.maps.Polygon({
+            paths: coords,
+            strokeColor: '#FF0000',
+            strokeOpacity: 0.8,
+            strokeWeight: 2,
+            fillColor: '#FF0000',
+            fillOpacity: 0.35
+          }).setMap(map);
+        })
+      }
+    })
+  }
 
   $scope.$on('$ionicView.enter', function(){
     init();
