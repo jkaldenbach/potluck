@@ -9,7 +9,7 @@ var nameApp = angular.module('starter', ['ionic', 'starter.controllers', 'starte
 .config(function($httpProvider) {
     $httpProvider.defaults.xsrfCookieName = 'csrftoken'
     $httpProvider.defaults.xsrfHeaderName = 'X-CSRFToken'
-});
+})
 .run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
@@ -25,7 +25,6 @@ var nameApp = angular.module('starter', ['ionic', 'starter.controllers', 'starte
     }
   });
 })
-
 .config(function($stateProvider, $urlRouterProvider) {
 
   // Ionic uses AngularUI Router which uses the concept of states
