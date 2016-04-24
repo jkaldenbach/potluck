@@ -64,10 +64,21 @@ angular.module('starter.controllers', ['ui.router'])
     });
   }
 
-  getRange();
+  $http.get('http://localhost:8000/deployments')
+  .then(function(res) {
+    $scope.deployments = res.data;
+  })
+  .then(getRange);
 
   $scope.predictPot = function(deployment) {
     $state.go('tab.predict', {pot: deployment})
+  };
+
+  $scope.retrievePot = function(index) {
+    var deployment = $scope.deployments[index];
+    deployment.status = "Collected";
+    $http.put('https://localhost:8000/deployments' + deployment.id);
+    $scope.deployments.splice(index, 1);
   };
 })
 
