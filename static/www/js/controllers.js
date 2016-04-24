@@ -27,16 +27,19 @@ angular.module('starter.controllers', ['ui.router'])
 /*******************************************************************/
 
 
-.controller('ReportCtrl', function($scope, $state) {
+.controller('ReportCtrl', function($scope, $state, $http) {
   $scope.check = true;
-  $scope.deployments = [
-    {name: "Pot1", state: "Lost", count: "10", loss_count: ""},
-    {name: "Pot2", state: "Lost", count: "10", loss_count: ""},
-    {name: "Pot3", state: "Lost", count: "10", loss_count: ""}
-  ];
+  // $scope.deployments = [
+  //   {name: "Pot1", state: "Lost", count: "10", loss_count: ""},
+  //   {name: "Pot2", state: "Lost", count: "10", loss_count: ""},
+  //   {name: "Pot3", state: "Lost", count: "10", loss_count: ""}
+  // ];
 
-  $scope.submitReport = function(a) {
-    $scope.deployments.splice(a,1);
+  $scope.submitReport = function(index) {
+    var deployment = $scope.deployments[index];
+    deployment.state = "Lost";
+    $http.patch('http://localhost:8000/deployments/' + deployment.id + '/', deployment);
+    $scope.deployments.splice(index, 1);
     $scope.check = $scope.deployments.length ? true : false;
   };
 
@@ -51,7 +54,14 @@ angular.module('starter.controllers', ['ui.router'])
     });
   }
 
-  getRange();
+  $http.get('http://localhost:8000/deployments')
+  .then(function(res) {
+    $scope.deployments = res.data.filter(function(dep) {
+      return dep.state === 'Deployed';
+    });
+    $scope.check = $scope.deployments.length ? true : false;
+  })
+  .then(getRange);
 })
 
 /*******************************************************************/
@@ -93,7 +103,6 @@ angular.module('starter.controllers', ['ui.router'])
   $scope.retrievePot = function(index) {
     var deployment = $scope.deployments[index];
     deployment.state = "Collected";
-    console.log(deployment);
     $http.patch('http://localhost:8000/deployments/' + deployment.id + '/', deployment);
     $scope.deployments.splice(index, 1);
     $scope.check = $scope.deployments.length ? true : false;
