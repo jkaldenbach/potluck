@@ -40,6 +40,27 @@ angular.module('starter.controllers', ['ui.router'])
   getRange();
 })
 
+.controller('RetrieveCtrl', function($scope, $state) {
+  $scope.deployments = [
+    {name: "Pot1", state: "Deployed", count: "10", loss_count: ""},
+    {name: "Pot2", state: "Deployed", count: "10", loss_count: ""},
+    {name: "Pot3", state: "Deployed", count: "10", loss_count: ""}
+  ];
+
+  function getRange() {
+    angular.forEach($scope.deployments, function(a) {
+      var int = parseInt(a.count);
+      range = [];
+      for (var i=1; i<int+1; i++) {
+        range.push(i);
+      }
+      a.range = range;
+    });
+  }
+
+  getRange();
+})
+
 .controller('DeployCtrl', function($scope, mapService, $http, $ionicLoading) {
   $scope.pots = [];
   $scope.waitingForLocation = true;
