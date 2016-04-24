@@ -429,7 +429,10 @@ angular.module('starter.controllers', ['ui.router'])
   };
 
   $scope.deletePot = function(index) {
-    $scope.pots.splice(index, 1);
+    $http.delete('http://localhost:8000/pots/' + $scope.pots[index].id + '/')
+    .then(function(){
+      $scope.pots.splice(index, 1);
+    })
   };
 
   $scope.savePot = function(pot) {
@@ -439,6 +442,7 @@ angular.module('starter.controllers', ['ui.router'])
       data: pot
     }).then(function (res) {
       console.log(res);
+      init();
     });
 
     $scope.modal.hide();
