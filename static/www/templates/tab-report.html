@@ -8,14 +8,20 @@
       <p><b>Note:</b> If one or several of your deployments have lost pots in their specific grouping, you can submit a Lost Pot Report, that will alert the respective authorities about your claim. You may also choose to share this information publicly to other commercial and recreational fisherman.</p>
     </div>
 
+    <div class="card" style="padding:10px; padding-top:15px" ng-show="!check">
+      <p>No remaining lost pots to report.</p>
+    </div>
+
     <ion-item ng-repeat="deployment in deployments">
       <label><b>Name:</b> {{deployment.name}}</label><br>
       <label><b>Status:</b> {{deployment.state}}</label><br>
-      <label><b>Original Count:</b>: {{deployment.count}}</label><br>
-      <label><b>Lost Count:</b></label>
-      <input ng-model="loss_count"></input>
-      <ion-checkbox class="border-none" checked="false"> Submit Publicly?</ion-checkbox>
+      <label><b>Original Count:</b> {{deployment.count}}</label><br>
+      <label><b>Loss Count:</b></label>
+      <input ng-model="deployment.loss_count" style="border:1px solid #CCC" type="number"/>
+      <br>
+      <label><b>Submit Publicly?</b></label>
+      <input type="checkbox" ng-model="public"></input>
+      <button class="button button-clear button-positive pull-right" ng-click="submitReport($index)">Submit</button>
     </ion-item>
-
   </ion-content>
 </ion-view>

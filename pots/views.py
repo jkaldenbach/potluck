@@ -2,8 +2,12 @@ from rest_framework import viewsets
 from rest_framework.decorators import list_route
 from rest_framework.response import Response
 
+from django.http import HttpResponse
+import json
+
 from .models import Pot, Location, Deployment, Fisher
 from .serializers import PotSerializer, LocationSerializer, DeploymentSerializer, FisherSerializer
+import services
 
 class PotViewSet(viewsets.ModelViewSet):
     queryset = Pot.objects.all()
@@ -32,3 +36,8 @@ class DeploymentViewSet(viewsets.ModelViewSet):
 class FisherViewSet(viewsets.ModelViewSet):
     queryset = Fisher.objects.all()
     serializer_class = FisherSerializer
+
+def getStormData(request):
+        return HttpResponse(
+            json.dumps(services.get_storm_data(request.GET['start'], request.GET['end']))
+        )

@@ -12,7 +12,7 @@ class PotSerializer(serializers.ModelSerializer):
         fields = ('id', 'name', 'type', 'top', 'middle', 'bottom', 'base', 'contrast', 'placement')
 
 class DeploymentSerializer(serializers.ModelSerializer):
-    locations = LocationSerializer(many=True)
+    locations = LocationSerializer(many=True, read_only=True)
     pot = PotSerializer(many=False, read_only=True)
     class Meta:
         model = Deployment

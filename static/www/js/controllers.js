@@ -28,13 +28,67 @@ angular.module('starter.controllers', ['ui.router'])
 
 
 .controller('ReportCtrl', function($scope, $state) {
+  $scope.check = true;
   $scope.deployments = [
-    {name: "Pot1", state: "Lost", count: "10", lost_count: ""},
-    {name: "Pot2", state: "Lost", count: "10", lost_count: ""},
-    {name: "Pot3", state: "Lost", count: "10", lost_count: ""}
+    {name: "Pot1", state: "Lost", count: "10", loss_count: ""},
+    {name: "Pot2", state: "Lost", count: "10", loss_count: ""},
+    {name: "Pot3", state: "Lost", count: "10", loss_count: ""}
   ];
 
+  $scope.submitReport = function(a) {
+    $scope.deployments.splice(a,1);
+    $scope.check = $scope.deployments.length ? true : false;
+  };
 
+  function getRange() {
+    angular.forEach($scope.deployments, function(a) {
+      var int = parseInt(a.count);
+      range = [];
+      for (var i=1; i<int+1; i++) {
+        range.push(i);
+      }
+      a.range = range;
+    });
+  }
+
+  getRange();
+})
+
+/*******************************************************************/
+/*******************************************************************/
+
+
+.controller('RetrieveCtrl', function($scope, $state) {
+  $scope.deployments = [
+    {name: "Pot1", state: "Deployed", count: "10", loss_count: ""},
+    {name: "Pot2", state: "Deployed", count: "10", loss_count: ""},
+    {name: "Pot3", state: "Deployed", count: "10", loss_count: ""}
+  ];
+
+  function getRange() {
+    angular.forEach($scope.deployments, function(a) {
+      var int = parseInt(a.count);
+      range = [];
+      for (var i=1; i<int+1; i++) {
+        range.push(i);
+      }
+      a.range = range;
+    });
+  }
+
+  getRange();
+
+  $scope.predictPot = function(deployment) {
+    $state.go('tab.predict', {pot: deployment})
+  };
+})
+
+/*******************************************************************/
+/*******************************************************************/
+
+
+.controller('PredictCtrl', function($scope, $state) {
+  $scope.pot = $state.params.pot;
 })
 
 /*******************************************************************/
@@ -66,6 +120,8 @@ angular.module('starter.controllers', ['ui.router'])
         $scope.deployment.latitude = $scope.newMarker.position.lat();
         $scope.deployment.longitude = $scope.newMarker.position.lng();
 
+        console.log($scope.deployment);
+
         $http.post('http://localhost:8000/deployments/', $scope.deployment).then(function(response){
           console.log(response);
           $ionicLoading.hide();
@@ -76,13 +132,6 @@ angular.module('starter.controllers', ['ui.router'])
         resetDeployment();
       }
     });
-
-    // $scope.deployment.name += pot.id;
-    // $scope.deployment.pot = pot.id;
-    //
-    // $http.post('http://localhost:8000/deployments/', $scope.deployment).then(function(response){
-    //   $ionicLoading.hide();
-    // });
   };
 
   function resetDeployment(){
@@ -162,53 +211,8 @@ angular.module('starter.controllers', ['ui.router'])
   $scope.pots = [];
   $scope.waitingForLocation = true;
 
-  $scope.deployment = {
-    name: new Date().getMonth() + "/" + new Date().getDate() + "/" + new Date().getFullYear(),
-    count: 1,
-    loss_count: 0,
-    loss_public: false,
-    state: "deployed",
-    locations: []
-  };
+  function showDeploymentModal(deployment){
 
-  $scope.submitDeployment = function(pot){
-    $ionicPopup.confirm({
-      title: 'Confirmation',
-      template: 'You are about to deploy'
-    }).then(function(res) {
-      if(res){
-        $scope.deployment.name += pot.id;
-        $scope.deployment.pot = pot.id;
-        $scope.deployment.locations.push({
-
-        });
-        $http.post('http://localhost:8000/deployments/', $scope.deployment).then(function(response){
-          console.log(response);
-          $ionicLoading.hide();
-          resetDeployment();
-        });
-      }
-      else{
-        resetDeployment();
-      }
-    });
-
-    $scope.deployment.name += pot.id;
-    $scope.deployment.pot = pot.id;
-
-    $http.post('http://localhost:8000/deployments/', $scope.deployment).then(function(response){
-      $ionicLoading.hide();
-    });
-  };
-
-  function resetDeployment(){
-    $scope.deployment = {
-      name: new Date().getMonth() + "/" + new Date().getDate() + "/" + new Date().getFullYear(),
-      count: 1,
-      loss_count: 0,
-      loss_public: false,
-      state: "deployed"
-    };
   }
 
   function init(){
@@ -226,23 +230,38 @@ angular.module('starter.controllers', ['ui.router'])
       if (data) {
         $scope.pots = data;
       }
+      $http({
+        method: 'GET',
+        url: 'http://localhost:8000/deployments/'
+      }).then(function(response){
+        if(response.data){
+          $scope.deployments = response.data;
 
-      navigator.geolocation.getCurrentPosition(function(position) {
-        var pos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-        var markerOptions = mapService.setupMarker(position, map);
+          $scope.deployments.forEach(function(deployment){
+            var icon = deployment.state === "deployed" ? "http://maps.google.com/mapfiles/kml/paddle/grn-blank-lv.png" : "http://maps.google.com/mapfiles/kml/paddle/red-blank-lv.png"
+            var markerOptions = mapService.setupMarker(deployment, map, icon);
 
-        position = {
-          lat: pos.lat(),
-          lng: pos.lng()
-        };
+            console.log(markerOptions);
 
-        map.setCenter(pos);
-        $scope.newMarker = new google.maps.Marker(markerOptions);
+            deployment.marker = new google.maps.Marker(markerOptions);
+          });
 
-        $scope.waitingForLocation = false;
-        $ionicLoading.hide();
+          console.log($scope.deployments);
 
-        $scope.$apply();
+          navigator.geolocation.getCurrentPosition(function(position) {
+            position = {
+              lat: position.coords.latitude,
+              lng: position.coords.longitude
+            };
+
+            map.setCenter(position);
+
+            $scope.waitingForLocation = false;
+            $ionicLoading.hide();
+
+            $scope.$apply();
+          });
+        }
       });
     });
   }
@@ -254,19 +273,8 @@ angular.module('starter.controllers', ['ui.router'])
     },
     zoom: 8
   },
-  map = new google.maps.Map(document.getElementById("gmap-deploy"), mapOptions),
+  map = new google.maps.Map(document.getElementById("gmap-pot-map"), mapOptions),
   processing = false;
-
-  google.maps.event.addListener(map, 'click', function(event){
-    var markerOptions = mapService.setupMarker(event, map);
-
-    if($scope.newMarker){
-      $scope.newMarker.setPosition(markerOptions.position);
-    }
-    else{
-      $scope.newMarker = new google.maps.Marker(markerOptions);
-    }
-  });
 
   init();
 })
@@ -346,13 +354,11 @@ angular.module('starter.controllers', ['ui.router'])
     $scope.pots.splice(index, 1);
   };
 
-  $scope.savePot = function(a) {
-    a.state = "deployed";
-
+  $scope.savePot = function(pot) {
     $http({
       method: 'POST',
       url: 'http://localhost:8000/pots/',
-      data: {pot:a}
+      data: pot
     }).then(function (res) {
       console.log(res);
     });

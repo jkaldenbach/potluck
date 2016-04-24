@@ -1,0 +1,27 @@
+<ion-view view-title="Retrieve">
+  <ion-content class="padding" data-tap-disabled="true">
+
+    <div class="bar bar-header bar-calm">
+      <h1 class="title">Retrieve Pots</h1>
+    </div><br><br><br>
+
+    <ion-item ng-repeat="deployment in deployments">
+      <label><b>Name:</b> {{deployment.name}}</label><br>
+      <label><b>Status:</b> {{deployment.state}}</label><br>
+      <label><b>Count:</b> {{deployment.count}}</label><br>
+      <label><b>Good Catch?</b></label>
+      <select>
+        <option value="" selected="selected"></option>
+        <option value="Yes">Yes</option>
+        <option value="No">No</option>
+      </select><br>
+      <button class="button button-clear button-positive pull-right">
+        <div> Retrieve</div>
+      </button>
+      <button class="button button-clear button-positive pull-left"
+        ng-click="predictPot(deployment)">
+        Predict
+      </button>
+    </ion-item>
+  </ion-content>
+</ion-view>

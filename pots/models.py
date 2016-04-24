@@ -21,8 +21,8 @@ class Deployment(models.Model):
     loss_count = models.IntegerField(blank=True, null=True, validators=[at_least_one])
     loss_public = models.BooleanField(default=False)
 
-    latitude = models.DecimalField(max_digits=9, decimal_places=6)
-    longitude = models.DecimalField(max_digits=9, decimal_places=6)
+    latitude = models.DecimalField(max_digits=18, decimal_places=15)
+    longitude = models.DecimalField(max_digits=18, decimal_places=15)
 
     state = models.CharField(
         max_length=20,

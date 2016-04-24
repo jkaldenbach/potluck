@@ -51,7 +51,7 @@ angular.module('starter.services', [])
 
 .service('mapService', function(){
   return {
-    setupMarker: function setupMarker(clickEvent, map){
+    setupMarker: function setupMarker(clickEvent, map, icon){
       var position = clickEvent, markerOptions;
 
       if(clickEvent.latLng){
@@ -65,14 +65,21 @@ angular.module('starter.services', [])
         position = {
           lat: clickEvent.lat(),
           lng: clickEvent.lng()
-        }
+        };
       }
 
       if(clickEvent.coords){
         position = {
           lat: clickEvent.coords.latitude,
           lng: clickEvent.coords.longitude
-        }
+        };
+      }
+
+      if(clickEvent.latitude){
+        position = {
+          lat: parseFloat(clickEvent.latitude),
+          lng: parseFloat(clickEvent.longitude)
+        };
       }
 
       markerOptions = {
@@ -80,6 +87,8 @@ angular.module('starter.services', [])
         title: new Date().toString(),
         position: position
       };
+
+      if(icon) markerOptions.icon = {url: icon};
 
       return markerOptions
     }

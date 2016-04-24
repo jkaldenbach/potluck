@@ -70,6 +70,29 @@ var nameApp = angular.module('starter', ['ionic', 'starter.controllers', 'starte
     }
   })
 
+  .state('tab.retrieve', {
+    url: '/retrieve',
+    views: {
+      'tab-dash': {
+        templateUrl: 'templates/tab-retrieve.html',
+        controller: 'RetrieveCtrl'
+      }
+    }
+  })
+
+  .state('tab.predict', {
+    url: '/predict',
+    views: {
+      'tab-dash': {
+        templateUrl: 'templates/tab-predict.html',
+        controller: 'PredictCtrl'
+      }
+    },
+    params: {
+      pot: {}
+    }
+  })
+
   .state('tab.deploy', {
     url: '/deploy',
     views: {

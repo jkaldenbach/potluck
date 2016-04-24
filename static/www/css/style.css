@@ -40,11 +40,6 @@
   line-height:30px;
   background-color:#EEE;
 }
-
-div.scroll {
-  height:87.5%;
-}
-
 .angular-google-map {
   height: 87.5%;
 }
@@ -57,7 +52,4 @@ div.scroll {
 }
 div.scroll {
   height: 87.5%
-}
-div.overflow-block{
-  overflow-y: scroll;
 }
