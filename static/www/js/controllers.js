@@ -28,7 +28,7 @@ angular.module('starter.controllers', ['ui.router'])
 
 
 .controller('ReportCtrl', function($scope, $state, $http) {
-  $scope.check = true;
+  $scope.check = false;
 
   $scope.submitReport = function(index) {
     var deployment = $scope.deployments[index];
@@ -64,7 +64,7 @@ angular.module('starter.controllers', ['ui.router'])
 
 
 .controller('RetrieveCtrl', function($scope, $state, $http) {
-  $scope.check = true;
+  $scope.check = false;
 
   function getRange() {
     angular.forEach($scope.deployments, function(a) {
