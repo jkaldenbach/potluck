@@ -33,7 +33,7 @@ angular.module('starter.controllers', ['ui.router'])
   $scope.submitReport = function(index) {
     var deployment = $scope.deployments[index];
     deployment.state = "Lost";
-    $http.put('http://localhost:8000/deployments/' + deployment.id + '/', deployment);
+    $http.put('/deployments/' + deployment.id + '/', deployment);
     $scope.deployments.splice(index, 1);
     $scope.check = $scope.deployments.length ? true : false;
   };
@@ -50,7 +50,7 @@ angular.module('starter.controllers', ['ui.router'])
   }
 
   $scope.$on('$ionicView.enter', function(){
-    $http.get('http://localhost:8000/deployments')
+    $http.get('/deployments')
     .then(function(res) {
       $scope.deployments = res.data.filter(function(dep) {
         return dep.state === 'Deployed';
@@ -80,7 +80,7 @@ angular.module('starter.controllers', ['ui.router'])
   }
 
   $scope.$on('$ionicView.enter', function(){
-    $http.get('http://localhost:8000/deployments')
+    $http.get('/deployments')
     .then(function(res) {
       $scope.deployments = res.data.filter(function(dep) {
         return dep.state !== 'Collected';
@@ -97,7 +97,7 @@ angular.module('starter.controllers', ['ui.router'])
   $scope.retrievePot = function(index) {
     var deployment = $scope.deployments[index];
     deployment.state = "Collected";
-    $http.put('http://localhost:8000/deployments/' + deployment.id + '/', deployment);
+    $http.put('/deployments/' + deployment.id + '/', deployment);
     $scope.deployments.splice(index, 1);
     $scope.check = $scope.deployments.length ? true : false;
   };
@@ -142,7 +142,7 @@ angular.module('starter.controllers', ['ui.router'])
 
         console.log($scope.deployment);
 
-        $http.post('http://localhost:8000/deployments/', $scope.deployment).then(function(response){
+        $http.post('/deployments/', $scope.deployment).then(function(response){
           console.log(response);
           $ionicLoading.hide();
           resetDeployment();
@@ -170,7 +170,7 @@ angular.module('starter.controllers', ['ui.router'])
     });
     $http({
       method: 'GET',
-      url: 'http://localhost:8000/pots/'
+      url: '/pots/'
     }).then(function (res) {
       var i,
       arr = [],
@@ -250,7 +250,7 @@ angular.module('starter.controllers', ['ui.router'])
           text: 'Report',
           type: 'button-assertive',
           onTap: function() {
-            $http.patch('http://localhost:8000/deployments/' + deployment.id + '/', {id: deployment.id, state: "Lost"}).then(function(){
+            $http.patch('/deployments/' + deployment.id + '/', {id: deployment.id, state: "Lost"}).then(function(){
               location.reload();
             });
           }
@@ -259,7 +259,7 @@ angular.module('starter.controllers', ['ui.router'])
           text: 'Retrieve',
           type: 'button-energized',
           onTap: function(){
-            $http.patch('http://localhost:8000/deployments/' + deployment.id + '/', {id: deployment.id, state: "Collected"}).then(function(){
+            $http.patch('/deployments/' + deployment.id + '/', {id: deployment.id, state: "Collected"}).then(function(){
               location.reload();
             });
           }
@@ -274,7 +274,7 @@ angular.module('starter.controllers', ['ui.router'])
     });
     $http({
       method: 'GET',
-      url: 'http://localhost:8000/pots/'
+      url: '/pots/'
     }).then(function (res) {
       var i,
       arr = [],
@@ -285,7 +285,7 @@ angular.module('starter.controllers', ['ui.router'])
       }
       $http({
         method: 'GET',
-        url: 'http://localhost:8000/deployments/'
+        url: '/deployments/'
       }).then(function(response){
         if(response.data){
           $scope.deployments = response.data;
@@ -394,7 +394,7 @@ angular.module('starter.controllers', ['ui.router'])
   function init() {
     $http({
       method: 'GET',
-      url: 'http://localhost:8000/pots/'
+      url: '/pots/'
     }).then(function(res) {
       var i,
       arr = [],
@@ -408,7 +408,7 @@ angular.module('starter.controllers', ['ui.router'])
 
     $http({
       method: 'GET',
-      url: 'http://localhost:8000/fishers/1'
+      url: '/fishers/1'
     }).then(function(fisher) {
       $scope.user = fisher.data;
       $scope.user.password = '********';
@@ -429,7 +429,7 @@ angular.module('starter.controllers', ['ui.router'])
   };
 
   $scope.deletePot = function(index) {
-    $http.delete('http://localhost:8000/pots/' + $scope.pots[index].id + '/')
+    $http.delete('/pots/' + $scope.pots[index].id + '/')
     .then(function(){
       $scope.pots.splice(index, 1);
     })
@@ -438,7 +438,7 @@ angular.module('starter.controllers', ['ui.router'])
   $scope.savePot = function(pot) {
     $http({
       method: 'POST',
-      url: 'http://localhost:8000/pots/',
+      url: '/pots/',
       data: pot
     }).then(function (res) {
       console.log(res);
